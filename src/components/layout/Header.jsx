@@ -29,7 +29,7 @@ const Header = () => {
                 <Link to={'/about'}>About</Link>
               </li>
               <li>
-                <Link to={'/menu'}>Menu</Link>
+                <Link to={'/menu'}>Tools</Link>
               </li>
               <li>
                 <Link to={'/contact'}>Contact</Link>
@@ -57,7 +57,7 @@ const Header = () => {
                 <Link to={'/about'}>About</Link>
               </li>
               <li>
-                <Link to={'/menu'}>Menu</Link>
+                <Link to={'/menu'}>Tools</Link>
               </li>
               <li>
                 <Link to={'/contact'}>Contact</Link>
@@ -71,7 +71,7 @@ const Header = () => {
           {drawer}
         </Drawer>
       </Box>
-      <Box sx={{p:1}}>
+      <Box >
         <Toolbar />
       </Box>
     </Box>
