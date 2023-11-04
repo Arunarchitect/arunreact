@@ -6,6 +6,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
 import '../styles/Dash.css'
+import BarChart from '../charts/BarChart';
 
 
 const Contact = () => {
@@ -18,12 +19,12 @@ const Contact = () => {
             <Stack spacing={2} direction='row'>
               <Card sx={{ minWidth: 49 + '%', height: 100 }} className='gradient'>
                 <CardContent>
-                  $100
+                Demo Dashboard
                 </CardContent>
               </Card>
               <Card sx={{ minWidth: 49 + '%', height: 100 }} className='gradient'>
                 <CardContent>
-                  $100  
+                Demo Dashboard
                 </CardContent>
               </Card>
             </Stack>            
@@ -33,14 +34,12 @@ const Contact = () => {
               <Card sx={{ minWidth: 49 + '%', height: 43 }} className='gradient1'>
 
                   <div className='paddingall'>
-                    <span>$203k</span> 
-                    <span>Total Income</span>
+                    <span>Demo Dashboard</span> 
                   </div>
               </Card>
               <Card sx={{ minWidth: 49 + '%', height: 43 }}  className='gradient2'>
                   <div className='paddingall'>
-                    <span>$203k</span> 
-                    <span>Total Income</span>
+                    <span>Demo Dashboard</span> 
                   </div>
               </Card>
             </ Stack>     
@@ -48,21 +47,14 @@ const Contact = () => {
           </Grid>
           <Box height={20} />
           <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <Card sx={{ height: 60 + 'vh' }}  className='gradient3'>
+            <Grid item xs={12}>
+              <Card sx={{minWidth: 20 + '%', height: 'vh' }}  className='gradient3'>
                 <CardContent>
-
+                  <BarChart />
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={4}>
-              <Card sx={{ height: 60 + 'vh' }}  className='gradient'>
-                <CardContent>
-
-                </CardContent>
-              </Card>
-              
-            </Grid>
+           
           </Grid>
           </Box>
         
