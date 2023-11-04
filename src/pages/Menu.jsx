@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, TableContainer, Table, Paper, Avatar,  TableCell, TableHead, TableBody, TableRow, TextField} from '@mui/material'
+import {useGetResumeprofileQuery} from '../services/testApi'
 
 const Menu = () => {
+  const {data, isSuccess} = useGetResumeprofileQuery()
+  console.log(data)
+  const [candidates, setCandidates] = useState([])
+
+  useEffect(()=>{
+    if(data && isSuccess){
+      setCandidates(data.candidates)
+    }
+  },[data, isSuccess])
+
   return (
     <Layout>
         <Box sx={{
@@ -26,9 +37,38 @@ const Menu = () => {
           <Typography variant='h4'>
             Tools
           </Typography>
-          <p>
-            The tools are under development!
-          </p>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Email</TableCell>
+                  <TableCell align="center">D.O.B</TableCell>
+                  <TableCell align='center' >Kerala</TableCell>
+                  <TableCell align='center' >Gender </TableCell>
+                  <TableCell align='center' >Location </TableCell>
+                  <TableCell align='center' >Image</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {candidates.map((candidate, i) => {
+                  return (
+                    <TableRow key={i} sx={{ '&:last-child td, &last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">{candidate.name}</TableCell>
+                      <TableCell align='center'>{candidate.email}</TableCell>
+                      <TableCell align='center'>{candidate.dob}</TableCell>
+                      <TableCell align='center'>{candidate.state}</TableCell>
+                      <TableCell align='center'>{candidate.gender}</TableCell>
+                      <TableCell align='center'>{candidate.location}</TableCell>
+                      <TableCell align='center'>
+                        <Avatar src={`https://api.arunarchitect.in/${candidate.pimage}`} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
     </Layout>
   )
