@@ -10,6 +10,7 @@
 .gradient1{
     background: rgb(255, 255, 255);
     background: linear-gradient(158deg, rgba(255, 255, 255, 0.027) 0%,rgb(0, 255, 55)) 100%;
+    
 }
 
 .gradient2{
@@ -29,3 +30,14 @@
     background: linear-gradient(158deg, rgb(0, 0, 0) 0%,rgb(0, 0, 0)) 100%;
     
 }
+
+.custom-label {
+    font-size: 2px; /* Adjust the font size here */
+  }
+
+
+.custom-radio-group .MuiSvgIcon-root {
+    font-size: 12px; /* Adjust the font size here */
+    margin-right: 1px; /* Adjust the spacing between the radio button and label here */
+  }
+  
