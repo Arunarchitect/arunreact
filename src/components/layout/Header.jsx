@@ -34,6 +34,9 @@ const Header = () => {
               <li>
                 <Link to={'/contact'}>Contact</Link>
               </li>
+              <li>
+                <Link to={'/test'}>Test</Link>
+              </li>
             </ul>
     </Box>
   )
@@ -61,6 +64,9 @@ const Header = () => {
               </li>
               <li>
                 <Link to={'/contact'}>Contact</Link>
+              </li>
+              <li>
+                <Link to={'/test'}>Test</Link>
               </li>
             </ul>
           </Box>
