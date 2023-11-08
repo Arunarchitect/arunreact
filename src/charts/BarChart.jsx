@@ -11,12 +11,13 @@ import { Bar } from "react-chartjs-2";
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-function BarChart({ title, budget, unit }) {
+
+function BarChart({ title, budget, unit, onEntryValueChange }) {
   const costSplitLabel = ["Planning", "Structure", "Mechanical", "Electrical", "Plumbing", "Painting", "Furnishing"];
   let entry;
 
   if (unit === "squareMeter") {
-    // If "Square Meter" unit is selected, convert title to square feet
+    // If "Square Meter" unit is selected, convert title to square feet 
     title = title * 10.67;
   }
 
@@ -27,6 +28,8 @@ function BarChart({ title, budget, unit }) {
   } else if (budget === "high") {
     entry = 4000 * title;
   }
+  onEntryValueChange(entry);
+  
   console.log("Title:", title);
   console.log("Budget:", budget);
   console.log("Entry:", entry);
@@ -73,10 +76,11 @@ function BarChart({ title, budget, unit }) {
 
   return (
     <div>
-      <Bar data={data} options={options} />
-      
+      <Bar data={data} options={options} />      
     </div>
   );
 }
+
+
 
 export default BarChart;

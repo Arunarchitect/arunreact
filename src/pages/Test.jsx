@@ -26,6 +26,15 @@ const Test = () => {
     }
   };
 
+  const [entryValue, setEntryValue] = useState(0);
+
+  // ...
+
+  const handleEntryValueChange = (value) => {
+    // Update the entry value when it changes in the BarChart component
+    setEntryValue(value);
+  };
+
   const handleBudgetChange = (event) => {
     setBudget(event.target.value);
   };
@@ -95,6 +104,9 @@ const Test = () => {
               <CardContent>
                 <h2>Project Gist</h2>
                 <p>Your required area is {displayedValue} {selectedUnit === 'squareFeet' ? 'sq.ft' : 'sq.m'}</p>
+                <p>
+                  Your project can cost a total of Rs.{entryValue}. 
+                </p>
               
               </CardContent>
             </Card>
@@ -103,7 +115,7 @@ const Test = () => {
             <Card sx={{ width: '100%', height: { xs: 300, sm: 615, md: 615, lg: 615 } }} className='gradient3'>
               <CardContent>
                 <h2>Budget Split</h2>
-                <BarChart title={displayedValue} budget={budget} unit={selectedUnit} /> {/* Pass displayedValue and selectedUnit as props */}
+                <BarChart title={displayedValue} budget={budget} unit={selectedUnit} onEntryValueChange={handleEntryValueChange} /> {/* Pass displayedValue and selectedUnit as props */}
               </CardContent>
             </Card>
           </Grid>
