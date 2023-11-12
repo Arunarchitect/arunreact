@@ -1,130 +1,77 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout'
-import { Box, Typography , FormControlLabel, InputLabel, Select ,MenuItem, Button } from '@mui/material'
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Stack from '@mui/material/Stack';
-import '../styles/Dash.css'
-import BarChart from '../charts/BarChart';
-import { FormControl } from '@mui/base/FormControl';
+import { Box, Typography, TableContainer, Table, Paper, Avatar,  TableCell, TableHead, TableBody, TableRow, TextField} from '@mui/material'
+import {useGetResumeprofileQuery} from '../services/testApi'
 
+const Menu = () => {
+  const {data, isSuccess} = useGetResumeprofileQuery()
+  console.log(data)
+  const [candidates, setCandidates] = useState([])
 
-
-const Contact = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [displayedValue, setDisplayedValue] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [budget, setBudget] = useState('');
-
-  const handleInputChange = (event) => {
-    const value = event.target.value;
-    
-    // Check if the input is a positive integer
-    if (/^[1-9]\d*$/.test(value) || value === '') {
-      setInputValue(value);
-      setErrorMessage('');
-    } else {
-      setErrorMessage('Please type a positive value');
+  useEffect(()=>{
+    if(data && isSuccess){
+      setCandidates(data.candidates)
     }
-  };
+  },[data, isSuccess])
 
-  const handleBudgetChange = (event) => {
-    setBudget(event.target.value);
-  };
-
-  const handleSubmit = () => {
-    if (!errorMessage) {
-      setDisplayedValue(inputValue);
-    }
-  };
   return (
-    <Layout >
-        <Box sx={{ display: 'flex' }} >
-          <Box component='main' sx={{flexGrow: 1, p:3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-            <Stack spacing={2} direction='row'>
-              <Card sx={{ minWidth: 49 + '%', height: 100 }} className='gradient'>
-                <CardContent>
-                Enter you Builtup area
-                </CardContent>
-              </Card>
-              <Card sx={{ minWidth: '49%', height: 100 }} className='gradient'>
-                <CardContent>
-                <FormControl>
-                <input
-                  type="text"
-                  value={inputValue}
-                  placeholder="Enter a positive integer"
-                  onChange={(e) => {
-                    const newValue = e.target.value;
-                    // Use parseInt to parse the input value as an integer
-                    // If parsing fails, newValue will be an empty string
-                    const intValue = parseInt(newValue);
-
-                    // Check if intValue is a valid integer (not NaN) and update the state
-                    if (!isNaN(intValue)) {
-                      setInputValue(intValue);
-                    } else {
-                      // Handle the case where the input is not a valid integer (e.g., display an error message)
-                      setInputValue('');
-                    }
-                  }}
-                />
-                  <InputLabel htmlFor="budget">Budget</InputLabel>
-                  <Select
-                    value={budget}
-                    onChange={handleBudgetChange}
-                    inputProps={{
-                      id: 'budget',
-                    }}
-                  >
-                    <MenuItem value="low">Low Budget</MenuItem>
-                    <MenuItem value="medium">Medium Budget</MenuItem>
-                    <MenuItem value="high">High Budget</MenuItem>
-                  </Select>
-                  <Button variant="contained" onClick={handleSubmit}>
-                    Submit
-                  </Button>
-                </FormControl>
-                </CardContent>
-              </Card>
-            </Stack>            
-            </Grid>
-            <Grid item xs={4}>
-            <Stack spacing={2}>
-              <Card sx={{ minWidth: 49 + '%', height: 43 }} className='gradient1'>
-
-                  <div className='paddingall'>
-                    <span>Your required area is {displayedValue} sq.ft</span>
-                    {errorMessage && <div>{errorMessage}</div>}
-                  </div>
-              </Card>
-              <Card sx={{ minWidth: 49 + '%', height: 43 }}  className='gradient2'>
-                  <div className='paddingall'>
-                    <span>Demo Dashboard</span> 
-                  </div>
-              </Card>
-            </ Stack>     
-            </Grid>
-          </Grid>
-          <Box height={20} />
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Card sx={{minWidth: 20 + '%', height: 'vh' }}  className='gradient3'>
-                <CardContent>
-                  <BarChart title={displayedValue} budget={budget} /> {/* Pass displayedValue as a prop */}
-                </CardContent>
-              </Card>
-            </Grid>
-           
-          </Grid>
-          </Box>
-        
-      </Box>
+    <Layout>
+        <Box sx={{
+          my:5,
+          textAlign:"center",
+          p:2,
+          "& h4":{
+            fontWeight:'bold',
+            my:'2',
+            fontSize:'2rem',
+          },
+          "& p":{
+            textAlign:'justify',
+            padding: '200px'
+            
+          },
+          "@media (max-width:600px)":{
+            mt:0,
+          }
+,        }}>
+          <Typography variant='h4'>
+            Tools
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Email</TableCell>
+                  <TableCell align="center">D.O.B</TableCell>
+                  <TableCell align='center' >Kerala</TableCell>
+                  <TableCell align='center' >Gender </TableCell>
+                  <TableCell align='center' >Location </TableCell>
+                  <TableCell align='center' >Image</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {candidates.map((candidate, i) => {
+                  return (
+                    <TableRow key={i} sx={{ '&:last-child td, &last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">{candidate.name}</TableCell>
+                      <TableCell align='center'>{candidate.email}</TableCell>
+                      <TableCell align='center'>{candidate.dob}</TableCell>
+                      <TableCell align='center'>{candidate.state}</TableCell>
+                      <TableCell align='center'>{candidate.gender}</TableCell>
+                      <TableCell align='center'>{candidate.location}</TableCell>
+                      <TableCell align='center'>
+                        <Avatar src={`https://api.arunarchitect.in/${candidate.pimage}`} />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
     </Layout>
   )
 }
 
-export default Contact
+export default Menu

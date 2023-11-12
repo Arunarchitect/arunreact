@@ -6,6 +6,9 @@ import Contact from './pages/Contact'
 import Pagenotfound from './pages/Pagenotfound'
 import Menu from './pages/Menu'
 import Test from "./pages/Test"
+import LoginReg from "./pages/auth/LoginReg"
+import SendPasswordResetEmail from "./pages/auth/SendPasswordResetEmail"
+import Dashboard from "./pages/Dashboard"
 
 
 function App() {
@@ -18,6 +21,9 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/test" element={<Test />} />
+            <Route path="/login" element={<LoginReg />} />
+            <Route path='resetpass' element={<SendPasswordResetEmail />} />
+            <Route path='/dashboard' element={<Dashboard />} />
             <Route path="/*" element={<Pagenotfound />} />
          </Routes>
         </BrowserRouter>

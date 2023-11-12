@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
-import { AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography, Button } from '@mui/material'
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import MenuIcon from '@mui/icons-material/Menu';
-import {Link} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import '../../styles/Headerstyles.css';
 
 const Header = () => {
@@ -22,21 +22,36 @@ const Header = () => {
           </Typography>
           <Divider />
             <ul className='mobile-navigation'>
-              <li >
-                <Link to={'/'}>Home</Link>
-              </li>
-              <li>
-                <Link to={'/about'}>About</Link>
-              </li>
-              <li>
-                <Link to={'/menu'}>Tools</Link>
-              </li>
-              <li>
-                <Link to={'/contact'}>Contact</Link>
-              </li>
-              <li>
-                <Link to={'/test'}>Test</Link>
-              </li>
+            <li>
+              <Button component={NavLink} to={'/'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Home
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                About
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/menu'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Tools
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/contact'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Contact
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/test'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Test
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/login'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Login/Register
+              </Button>
+            </li>
             </ul>
     </Box>
   )
@@ -52,23 +67,38 @@ const Header = () => {
               My modelflick
           </Typography>
           <Box sx={{display:{xs:'none', sm:'block'}}}>
-            <ul className='navigation-menu'>
-              <li >
-                <Link to={'/'}>Home</Link>
-              </li>
-              <li>
-                <Link to={'/about'}>About</Link>
-              </li>
-              <li>
-                <Link to={'/menu'}>Tools</Link>
-              </li>
-              <li>
-                <Link to={'/contact'}>Contact</Link>
-              </li>
-              <li>
-                <Link to={'/test'}>Test</Link>
-              </li>
-            </ul>
+          <ul className='navigation-menu'>
+            <li>
+              <Button component={NavLink} to={'/'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Home
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                About
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/menu'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Tools
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/contact'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Contact
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/test'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Test
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/login'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Login/Register
+              </Button>
+            </li>
+          </ul>
           </Box>
         </Toolbar>
       </AppBar>
