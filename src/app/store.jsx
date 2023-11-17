@@ -1,19 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit'
-// Or from '@reduxjs/toolkit/query/react'
-import { setupListeners } from '@reduxjs/toolkit/query'
-import { testApi } from '../services/testApi'
+import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
+import { testApi } from '../services/testApi';
+import { testApi1 } from '../services/testApi';  // Import the second API
 
 export const store = configureStore({
   reducer: {
-    // Add the generated reducer as a specific top-level slice
     [testApi.reducerPath]: testApi.reducer,
+    [testApi1.reducerPath]: testApi1.reducer,  // Add the reducer path for the second API
   },
-  // Adding the api middleware enables caching, invalidation, polling,
-  // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(testApi.middleware),
-})
+    getDefaultMiddleware().concat(testApi.middleware, testApi1.middleware),  // Add middleware for the second API
+});
 
-// optional, but required for refetchOnFocus/refetchOnReconnect behaviors
-// see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
-setupListeners(store.dispatch)
+// setupListeners as you have it, no changes needed
+setupListeners(store.dispatch);
