@@ -50,9 +50,12 @@ const Header = () => {
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/login'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+              {access_token ? <Button component={NavLink} to={'/dashboard'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Dashboard
+              </Button> : <Button component={NavLink} to={'/login'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 Login/Register
-              </Button>
+              </Button> }
+              
             </li>
             </ul>
     </Box>
