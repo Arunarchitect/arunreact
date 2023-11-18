@@ -25,21 +25,20 @@ const Registration = () => {
             tc: data.get('tc')
         }
         const res = await registerUser(actualData)
-        if (res.error){
-            console.log(typeof(res.error.data.errors))
-            console.log(res.error.data.errors)
-            setServerError(res.error.data.errors)
+        if (res.error) {
+          console.log(res.error.data.errors);
+          setServerError(res.error.data.errors);
         }
-        if (res.data){
-            console.log(typeof(res.data))
-            console.log(res.data)
-            navigate ('/dashboard')
+      
+        if (res.data) {
+          console.log(res.data);
+          // Move navigation inside the success block
+          navigate('/dashboard');
         }
     }
   return (
     <>
         {server_error.non_field_errors ? console.log(server_error.non_field_errors[0]):""}
-        {server_error.name ? console.log(server_error.name[0]):""}
         {server_error.email ? console.log(server_error.email[0]):""}
         {server_error.password ? console.log(server_error.password[0]):""}
         {server_error.password2 ? console.log(server_error.password2[0]):""}
