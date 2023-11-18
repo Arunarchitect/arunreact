@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { TextField, Box, Button,  FormControlLabel, Checkbox, Typography, Alert} from '@mui/material'
 import {  useNavigate } from 'react-router-dom'
 import { useRegisterUserMutation } from '../../services/testApi'
+import { storeToken } from '../../services/LocalStorageService'
 
 
 const Registration = () => {
@@ -33,6 +34,7 @@ const Registration = () => {
         if (res.data) {
           console.log(res.data);
           // Move navigation inside the success block
+          storeToken(res.data.token)
           navigate('/dashboard');
         }
     }

@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout'
 import { Box, Typography, TableContainer, Table, Paper, Avatar,  TableCell, TableHead, TableBody, TableRow, TextField} from '@mui/material'
-// import {useGetResumeprofileQuery} from '../services/testApi'
+import {useGetResumeprofileQuery} from '../services/testApi'
 
 const Menu = () => {
-  // const {data, isSuccess} = useGetResumeprofileQuery()
-  // console.log(data)
-  // const [candidates, setCandidates] = useState([])
+  const {data, isSuccess} = useGetResumeprofileQuery()
+  const [candidates, setCandidates] = useState([])
 
-  // useEffect(()=>{
-  //   if(data && isSuccess){
-  //     setCandidates(data.candidates)
-  //   }
-  // },[data, isSuccess])
+  useEffect(()=>{
+    if(data && isSuccess){
+      setCandidates(data.candidates)
+    }
+  },[data, isSuccess])
 
   return (
     <Layout>
-        {/* <Box sx={{
+        <Box sx={{
           my:5,
           textAlign:"center",
           p:2,
@@ -69,7 +68,7 @@ const Menu = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        </Box> */}
+        </Box>
     </Layout>
   )
 }

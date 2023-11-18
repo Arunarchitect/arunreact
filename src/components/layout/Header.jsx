@@ -4,8 +4,10 @@ import FastfoodIcon from '@mui/icons-material/Fastfood';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link, NavLink} from 'react-router-dom'
 import '../../styles/Headerstyles.css';
+import { getToken } from '../../services/LocalStorageService';
 
 const Header = () => {
+  const {access_token} = getToken()
   const [mobileOpen, setMobileOpen]= useState(false)
 
   // handlemenu click
@@ -94,9 +96,12 @@ const Header = () => {
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/login'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+              {access_token ? <Button component={NavLink} to={'/dashboard'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Dashboard
+              </Button> : <Button component={NavLink} to={'/login'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 Login/Register
-              </Button>
+              </Button> }
+              
             </li>
           </ul>
           </Box>
