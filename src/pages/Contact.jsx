@@ -1,19 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react'
 import Layout from '../components/layout/Layout'
-import { Box, Typography, TableContainer, Table, Paper, Avatar,  TableCell, TableHead, TableBody, TableRow, TextField} from '@mui/material'
-import {useGetResumeprofileQuery} from '../services/testApi'
+import { Box, Typography } from '@mui/material'
 
-const Menu = () => {
-  const {data, isSuccess} = useGetResumeprofileQuery()
-  console.log(data)
-  const [candidates, setCandidates] = useState([])
-
-  useEffect(()=>{
-    if(data && isSuccess){
-      setCandidates(data.candidates)
-    }
-  },[data, isSuccess])
-
+const Contact = () => {
   return (
     <Layout>
         <Box sx={{
@@ -27,51 +16,34 @@ const Menu = () => {
           },
           "& p":{
             textAlign:'justify',
-            padding: '200px'
-            
+            padding: '50px'
           },
           "@media (max-width:600px)":{
             mt:0,
           }
-,        }}>
+        }}>
           <Typography variant='h4'>
-            Tools
+            Get in Touch
           </Typography>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Name</TableCell>
-                  <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">D.O.B</TableCell>
-                  <TableCell align='center' >Kerala</TableCell>
-                  <TableCell align='center' >Gender </TableCell>
-                  <TableCell align='center' >Location </TableCell>
-                  <TableCell align='center' >Image</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {candidates.map((candidate, i) => {
-                  return (
-                    <TableRow key={i} sx={{ '&:last-child td, &last-child th': { border: 0 } }}>
-                      <TableCell component="th" scope="row">{candidate.name}</TableCell>
-                      <TableCell align='center'>{candidate.email}</TableCell>
-                      <TableCell align='center'>{candidate.dob}</TableCell>
-                      <TableCell align='center'>{candidate.state}</TableCell>
-                      <TableCell align='center'>{candidate.gender}</TableCell>
-                      <TableCell align='center'>{candidate.location}</TableCell>
-                      <TableCell align='center'>
-                        <Avatar src={`https://api.arunarchitect.in/${candidate.pimage}`} />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <p>
+            We appreciate your interest in Modelflick! Whether you have questions, feedback, or just want to say hello, we'd love to hear from you. Feel free to reach out using the contact information provided below.
+          </p>
+          <br />
+          <p>
+            For general inquiries and information, you can contact us via email at <strong>modelflick@gmail.com</strong>. We aim to respond to emails within 24 hours.
+          </p>
+          <br />
+          <p>
+            Connect with us on our social media pages for the latest updates, design inspirations, and more. You can find us on Facebook, Twitter, Instagram, and Pinterest – all under the name Modelflick.
+          </p>
+          <br />
+         
+          <p>
+            Stay connected with Modelflick for design trends, project updates, and more. We look forward to hearing from you!
+          </p>
         </Box>
     </Layout>
   )
 }
 
-export default Menu
+export default Contact

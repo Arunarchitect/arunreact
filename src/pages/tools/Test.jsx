@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Layout from '../components/layout/Layout'
+import Layout from '../../components/layout/Layout'
 import { Box, Typography, FormControlLabel, InputLabel, Select, MenuItem, Button, TextField, RadioGroup, Radio } from '@mui/material'
 import { Grid, Card, CardActionArea, CardMedia, CardContent } from '@mui/material'
 import Stack from '@mui/material/Stack'
-import '../styles/Dash.css'
-import BarChart from '../charts/BarChart';
+import '../../styles/Dash.css'
+import BarChart from '../../charts/BarChart';
 import { FormControl } from '@mui/base/FormControl'
 
 const Test = () => {

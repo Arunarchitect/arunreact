@@ -18,12 +18,12 @@ const Menu = () => {
 
   // Tool data array
   const tools = [
-    { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/tool1' },
-    { title: 'Advisory Engine', subheader: 'Get expert advice', avatarLabel: 'A', route: '/tool2' },
-    { title: 'Regulatory Compliance', subheader: 'Ensure compliance', avatarLabel: 'R', route: '/tool3' },
-    { title: 'Design Recommender', subheader: 'Optimize designs', avatarLabel: 'D', route: '/tool4' },
-    { title: 'Data Analysis Suite', subheader: 'Analytical insights', avatarLabel: 'D', route: '/tool5' },
-    { title: 'Project Evaluation', subheader: 'Evaluate project viability', avatarLabel: 'P', route: '/tool6' },
+    { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/test' },
+    { title: 'Advisory Engine', subheader: 'Get expert advice', avatarLabel: 'A', route: '/schedule' },
+    { title: 'Regulatory Compliance', subheader: 'Ensure compliance', avatarLabel: 'R', route: '/schedule' },
+    { title: 'Design Recommender', subheader: 'Optimize designs', avatarLabel: 'D', route: '/schedule' },
+    { title: 'Data Analysis Suite', subheader: 'Analytical insights', avatarLabel: 'D', route: '/schedule' },
+    { title: 'Project Evaluation', subheader: 'Evaluate project viability', avatarLabel: 'P', route: '/schedule' },
   ];
 
   return (

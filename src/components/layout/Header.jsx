@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import { AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography, Button } from '@mui/material'
 import FastfoodIcon from '@mui/icons-material/Fastfood';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Link, NavLink} from 'react-router-dom'
 import '../../styles/Headerstyles.css';
@@ -19,8 +20,8 @@ const Header = () => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{textAlign:'center'}}>
       <Typography color={'goldenrod'} variant='h6' component={"div"} sx={{flexGrow:1, my:2}}>
-            <FastfoodIcon />
-              My modelflick
+            <SettingsSuggestIcon />
+              Modelflick
           </Typography>
           <Divider />
             <ul className='mobile-navigation'>
@@ -30,23 +31,18 @@ const Header = () => {
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
-                About
-              </Button>
-            </li>
-            <li>
               <Button component={NavLink} to={'/menu'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 Tools
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/contact'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
-                Contact
+              <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                About
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/test'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
-                Test
+              <Button component={NavLink} to={'/contact'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Contact
               </Button>
             </li>
             <li>
@@ -68,8 +64,8 @@ const Header = () => {
             <MenuIcon />
           </IconButton>
           <Typography color={'goldenrod'} variant='h6' component={"div"} sx={{flexGrow:1}}>
-            <FastfoodIcon />
-              My modelflick
+            <SettingsSuggestIcon />
+              Modelflick
           </Typography>
           <Box sx={{display:{xs:'none', sm:'block'}}}>
           <ul className='navigation-menu'>
@@ -79,23 +75,19 @@ const Header = () => {
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
-                About
-              </Button>
-            </li>
-            <li>
               <Button component={NavLink} to={'/menu'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 Tools
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/contact'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
-                Contact
+              <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                About
               </Button>
             </li>
+            
             <li>
-              <Button component={NavLink} to={'/test'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
-                Test
+              <Button component={NavLink} to={'/contact'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Contact
               </Button>
             </li>
             <li>

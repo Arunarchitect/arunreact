@@ -5,12 +5,13 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Pagenotfound from './pages/Pagenotfound'
 import Menu from './pages/Menu'
-import Test from "./pages/Test"
+import Test from "./pages/tools/Test"
 import LoginReg from "./pages/auth/LoginReg"
 import SendPasswordResetEmail from "./pages/auth/SendPasswordResetEmail"
 import Dashboard from "./pages/Dashboard"
 import { useSelector } from "react-redux";
 import ResetPassword from "./pages/auth/ResetPassword"
+import Schedule from "./pages/tools/Schedule"
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/test" element={<Test />} />
+            <Route path="/schedule" element={<Schedule />} />
             <Route path="/login" element={!access_token ? <LoginReg /> : <Navigate to='/dashboard' />} />
             <Route path='resetpass' element={<SendPasswordResetEmail />} />
             <Route path='apis/user/reset-password/:id/:token' element={<ResetPassword />} />
