@@ -12,9 +12,10 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import '../styles/Dash.css';
+import constructImage from '../images/construct.png';
 
 const Menu = () => {
-  const imageSource = '/src/images/construct.png';
+  const imageSource = constructImage
 
   // Tool data array
   const tools = [
