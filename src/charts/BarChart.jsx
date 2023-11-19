@@ -30,9 +30,9 @@ function BarChart({ title, budget, unit, onEntryValueChange }) {
   }
   onEntryValueChange(entry);
   
-  console.log("Title:", title);
-  console.log("Budget:", budget);
-  console.log("Entry:", entry);
+  // console.log("Title:", title);
+  // console.log("Budget:", budget);
+  // console.log("Entry:", entry);
 
   const costSplitData = [0.05* entry, 0.1* entry, 0.15* entry, 0.05* entry, 0.15* entry, 0.3* entry, 0.1* entry]
   
@@ -67,12 +67,12 @@ function BarChart({ title, budget, unit, onEntryValueChange }) {
   };
 
   // Add console.log statements to log data and options
-  console.log("Data Object:", data);
+  // console.log("Data Object:", data);
 
   const options = {};
 
   // Add a console.log statement to log the options object
-  console.log("Options Object:", options);
+  // console.log("Options Object:", options);
 
   return (
     <div>

@@ -1,76 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import Layout from '../components/layout/Layout'
-import { Box, Typography, TableContainer, Table, Paper, Avatar,  TableCell, TableHead, TableBody, TableRow, TextField} from '@mui/material'
-import {useGetResumeprofileQuery} from '../services/testApi'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Layout from '../components/layout/Layout';
+import { Grid } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import '../styles/Dash.css';
 
 const Menu = () => {
-  const {data, isSuccess} = useGetResumeprofileQuery()
-  const [candidates, setCandidates] = useState([])
+  const imageSource = '/src/images/construct.png';
 
-  useEffect(()=>{
-    if(data && isSuccess){
-      setCandidates(data.candidates)
-    }
-  },[data, isSuccess])
+  // Tool data array
+  const tools = [
+    { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/tool1' },
+    { title: 'Advisory Engine', subheader: 'Get expert advice', avatarLabel: 'A', route: '/tool2' },
+    { title: 'Regulatory Compliance', subheader: 'Ensure compliance', avatarLabel: 'R', route: '/tool3' },
+    { title: 'Design Recommender', subheader: 'Optimize designs', avatarLabel: 'D', route: '/tool4' },
+    { title: 'Data Analysis Suite', subheader: 'Analytical insights', avatarLabel: 'D', route: '/tool5' },
+    { title: 'Project Evaluation', subheader: 'Evaluate project viability', avatarLabel: 'P', route: '/tool6' },
+  ];
 
   return (
     <Layout>
-        <Box sx={{
-          my:5,
-          textAlign:"center",
-          p:2,
-          "& h4":{
-            fontWeight:'bold',
-            my:'2',
-            fontSize:'2rem',
-          },
-          "& p":{
-            textAlign:'justify',
-            padding: '200px'
-            
-          },
-          "@media (max-width:600px)":{
-            mt:0,
-          }
-,        }}>
-          <Typography variant='h4'>
-            Tools
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">Name</TableCell>
-                  <TableCell align="center">Email</TableCell>
-                  <TableCell align="center">D.O.B</TableCell>
-                  <TableCell align='center' >Kerala</TableCell>
-                  <TableCell align='center' >Gender </TableCell>
-                  <TableCell align='center' >Location </TableCell>
-                  <TableCell align='center' >Image</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {candidates.map((candidate, i) => {
-                  return (
-                    <TableRow key={i} sx={{ '&:last-child td, &last-child th': { border: 0 } }}>
-                      <TableCell component="th" scope="row">{candidate.name}</TableCell>
-                      <TableCell align='center'>{candidate.email}</TableCell>
-                      <TableCell align='center'>{candidate.dob}</TableCell>
-                      <TableCell align='center'>{candidate.state}</TableCell>
-                      <TableCell align='center'>{candidate.gender}</TableCell>
-                      <TableCell align='center'>{candidate.location}</TableCell>
-                      <TableCell align='center'>
-                        <Avatar src={`https://api.arunarchitect.in/${candidate.pimage}`} />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+      <Grid container spacing={2} padding={3} style={{ backgroundColor: 'gray' }} justifyContent="center">
+        {tools.map((tool, index) => (
+          <Grid key={index} item xs={12} lg={4} sm={4} padding={2}>
+            {/* Wrap the Card with a Link */}
+            <Link to={tool.route} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <Card
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '16px',
+                  transition: 'transform 0.2s',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                  },
+                }}
+                className='cardgradient'
+              >
+                <CardHeader
+                  avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label={tool.avatarLabel}>{tool.avatarLabel}</Avatar>}
+                  action={<IconButton aria-label="settings"><MoreVertIcon /></IconButton>}
+                  title={tool.title}
+                  subheader={tool.subheader}
+                />
+                <CardMedia component="img" height="194" image={imageSource} alt={tool.title} />
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    {tool.subheader}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
+          </Grid>
+        ))}
+      </Grid>
     </Layout>
-  )
-}
+  );
+};
 
-export default Menu
+export default Menu;

@@ -11,9 +11,9 @@ const Home = () => {
           <div className="headerContainer">
             <h1>Modelflick</h1>
             <p>Design Assistance</p>
-            <Link to="/about">
+            <Link to="/menu">
             <button>
-              Get Quote!
+              Explore our Tools!
             </button>
             </Link>
           </div>

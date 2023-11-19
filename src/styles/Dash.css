@@ -41,3 +41,10 @@
     margin-right: 1px; /* Adjust the spacing between the radio button and label here */
   }
   
+.cardgradient {
+    background: rgb(255, 255, 255);
+    background: linear-gradient(158deg, rgba(255, 255, 255, 0.027) 0%, rgb(202, 202, 206)) 100%;
+ /* You can adjust the value to your preference */
+    /* You can also use percentages for a responsive design, like border-radius: 5%; */
+}
+ 
