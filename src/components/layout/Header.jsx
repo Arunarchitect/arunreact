@@ -36,6 +36,11 @@ const Header = () => {
               </Button>
             </li>
             <li>
+              <Button component={NavLink} to={'/blog'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Blog
+              </Button>
+            </li>
+            <li>
               <Button component={NavLink} to={'/about'} style={({ isActive }) => ({ color: isActive ? 'white' : 'black', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 About
               </Button>
@@ -77,6 +82,11 @@ const Header = () => {
             <li>
               <Button component={NavLink} to={'/menu'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 Tools
+              </Button>
+            </li>
+            <li>
+              <Button component={NavLink} to={'/blog'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+                Blog
               </Button>
             </li>
             <li>
