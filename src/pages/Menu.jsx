@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import { Grid } from '@mui/material';
@@ -15,9 +15,41 @@ import '../styles/Dash.css';
 import constructImage from '../images/construct.png';
 
 const Menu = () => {
-  const imageSource = constructImage
+  const imageSource = constructImage;
 
-  // Tool data array
+  const [isRotated, setIsRotated] = useState(false);
+  const [opacity, setOpacity] = useState(1);
+
+  const handleRotate = () => {
+    setIsRotated(!isRotated);
+  };
+
+  const resetRotation = () => {
+    setIsRotated(false);
+  };
+
+  useEffect(() => {
+    const blinkTimers = [];
+
+    // Function to generate a random blink for each card
+    const blinkRandomly = (index) => {
+      blinkTimers[index] = setInterval(() => {
+        setOpacity((prevOpacity) => (Math.random() > 0.5 ? 1 : 0.5));
+      }, 250);
+    };
+
+    // Set up the blink timers for each card
+    const toolsLength = tools.length;
+    for (let i = 0; i < toolsLength; i++) {
+      blinkRandomly(i);
+    }
+
+    // Clear all timers when the component unmounts
+    return () => {
+      blinkTimers.forEach((timer) => clearInterval(timer));
+    };
+  }, []); // Empty dependency array ensures the effect runs only once on mount
+
   const tools = [
     { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/test' },
     { title: 'Advisory Engine', subheader: 'Get expert advice', avatarLabel: 'A', route: '/schedule' },
@@ -32,19 +64,19 @@ const Menu = () => {
       <Grid container spacing={2} padding={3} style={{ backgroundColor: 'gray' }} justifyContent="center">
         {tools.map((tool, index) => (
           <Grid key={index} item xs={12} lg={4} sm={4} padding={2}>
-            {/* Wrap the Card with a Link */}
             <Link to={tool.route} style={{ textDecoration: 'none', color: 'inherit' }}>
               <Card
                 sx={{
                   width: '100%',
                   height: '100%',
                   borderRadius: '16px',
-                  transition: 'transform 0.2s',
+                  position: 'relative',
                   '&:hover': {
-                    transform: 'scale(1.05)',
+                    transform: isRotated ? 'rotate(360deg)' : 'rotate(0deg)',
                   },
                 }}
                 className='cardgradient'
+                onClick={handleRotate}
               >
                 <CardHeader
                   avatar={<Avatar sx={{ bgcolor: red[500] }} aria-label={tool.avatarLabel}>{tool.avatarLabel}</Avatar>}
@@ -52,7 +84,17 @@ const Menu = () => {
                   title={tool.title}
                   subheader={tool.subheader}
                 />
-                <CardMedia component="img" height="194" image={imageSource} alt={tool.title} />
+                <CardMedia
+                  component="img"
+                  height="194"
+                  image={imageSource}
+                  alt={tool.title}
+                  style={{
+                    transition: 'transform 0.5s, opacity 0.5s',
+                    opacity: opacity,
+                  }}
+                  onAnimationEnd={resetRotation}
+                />
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">
                     {tool.subheader}

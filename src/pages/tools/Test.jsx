@@ -51,10 +51,10 @@ const Test = () => {
 
   return (
     <Layout>
-      <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Box sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: 'gray' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-            <Card sx={{ width: '100%', height: { xs: 240, sm: 300, md: 300, lg: 300 } }} className='gradient'>
+            <Card sx={{ width: '100%', height: { xs: 240, sm: 300, md: 300, lg: 300 } }} className='gradient3'>
               <CardContent>
                 <h2>Enter your built-up area</h2>
                 <FormControl>
@@ -100,7 +100,7 @@ const Test = () => {
                 </FormControl>
               </CardContent>
             </Card>
-            <Card sx={{ width: '100%', height: { xs: 120, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className='gradient2'>
+            <Card sx={{ width: '100%', height: { xs: 120, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className='gradient3'>
               <CardContent>
                 <h2>Project Gist</h2>
                 <p>Your required area is {displayedValue} {selectedUnit === 'squareFeet' ? 'sq.ft' : 'sq.m'}</p>

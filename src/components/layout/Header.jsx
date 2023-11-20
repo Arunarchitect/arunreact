@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography, Button } from '@mui/material'
+import { AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography, Button, TextField } from '@mui/material'
 import FastfoodIcon from '@mui/icons-material/Fastfood';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -58,6 +58,18 @@ const Header = () => {
               </Button> }
               
             </li>
+            <li>
+            <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
+            <TextField
+                sx={{ display: 'flex', borderBottom: '1px solid white', '::placeholder': { color: '#fff' } }}
+                label="Search"
+                id="standard-basic"
+                variant="standard"
+                InputLabelProps={{ style: { color: 'black' } }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </Box>
+            </li>
             </ul>
     </Box>
   )
@@ -108,7 +120,24 @@ const Header = () => {
               </Button> }
               
             </li>
+            <li>
+            <TextField
+              sx={{
+                display: 'flex',
+                borderBottom: '1px solid white',
+                '::placeholder': { color: '#fff' },
+                '& input': { color: 'white' }, // Text color when typing
+              }}
+              label="Search here"
+              id="standard-basic"
+              variant="standard"
+              InputLabelProps={{ style: { color: 'white' } }}
+            />
+            </li>
+            
           </ul>
+          
+  
           </Box>
         </Toolbar>
       </AppBar>

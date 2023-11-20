@@ -19,12 +19,12 @@ const Blog = () => {
 
   // Tool data array
   const tools = [
-    { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/blog' },
-    { title: 'Advisory Engine', subheader: 'Get expert advice', avatarLabel: 'A', route: '/blog' },
-    { title: 'Regulatory Compliance', subheader: 'Ensure compliance', avatarLabel: 'R', route: '/blog' },
-    { title: 'Design Recommender', subheader: 'Optimize designs', avatarLabel: 'D', route: '/blog' },
-    { title: 'Data Analysis Suite', subheader: 'Analytical insights', avatarLabel: 'D', route: '/blog' },
-    { title: 'Project Evaluation', subheader: 'Evaluate project viability', avatarLabel: 'P', route: '/blog' },
+    { title: 'B.I.M', subheader: 'Building Information Modelling', avatarLabel: 'B', route: '/post' },
+    { title: 'B.I.M', subheader: 'Building Information Modelling', avatarLabel: 'B', route: '/post' },
+    { title: 'B.I.M', subheader: 'Building Information Modelling', avatarLabel: 'B', route: '/post' },
+    { title: 'B.I.M', subheader: 'Building Information Modelling', avatarLabel: 'B', route: '/post' },
+    { title: 'B.I.M', subheader: 'Building Information Modelling', avatarLabel: 'B', route: '/post' },
+    { title: 'B.I.M', subheader: 'Building Information Modelling', avatarLabel: 'B', route: '/post' },
   ];
 
   return (
