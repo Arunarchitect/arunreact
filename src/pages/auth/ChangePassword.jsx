@@ -39,10 +39,10 @@ const ChangePassword = () => {
     {server_error.password ? console.log(server_error.password[0]) : ""}
     {server_error.password2 ? console.log(server_error.password2[0]) : ""} */}
     <Box sx={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', maxWidth: 600, mx: 4 }}>
-      <h1>Change Password</h1>
+      <h5>Change Password</h5>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} id="password-change-form">
         <TextField margin="normal" required fullWidth name="password" label="New Password" type="password" id="password" />
-        {server_error.password ? <Typography style={{ fontSize: 12, color: 'red', paddingLeft: 10 }}>{server_error.password[0]}</Typography> : ""}
+        {server_error.password ? <Typography style={{ fontSize: 10, color: 'red', paddingLeft: 10 }}>{server_error.password[0]}</Typography> : ""}
         <TextField margin="normal" required fullWidth name="password2" label="Confirm New Password" type="password" id="password2" />
         {server_error.password2 ? <Typography style={{ fontSize: 12, color: 'red', paddingLeft: 10 }}>{server_error.password2[0]}</Typography> : ""}
         <Box textAlign='center'>

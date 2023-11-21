@@ -16,6 +16,9 @@ const Header = () => {
     setMobileOpen(!mobileOpen)
   }
 
+  
+
+
   //menu drawer
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{textAlign:'center'}}>
@@ -97,7 +100,7 @@ const Header = () => {
               </Button>
             </li>
             <li>
-              <Button component={NavLink} to={'/blog'} style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
+              <Button component={NavLink} to={'/blog'}  style={({ isActive }) => ({ color: 'white', textTransform: 'none', backgroundColor: isActive ? 'blue' : '' })}>
                 Blog
               </Button>
             </li>

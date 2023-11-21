@@ -14,6 +14,7 @@ import ResetPassword from "./pages/auth/ResetPassword"
 import Schedule from "./pages/tools/Schedule"
 import Blog from "./pages/Blog"
 import Post from "./pages/blog/Post"
+import Projects from "./pages/pro/Projects"
 
 
 function App() {
@@ -27,8 +28,9 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/menu" element={<Menu />} />
             <Route path="/blog" element={<Blog />} />
-            <Route path="/post" element={<Post />} />
+            <Route path="/post/:id" element={<Post />} />
             <Route path="/test" element={<Test />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/login" element={!access_token ? <LoginReg /> : <Navigate to='/dashboard' />} />
             <Route path='resetpass' element={<SendPasswordResetEmail />} />

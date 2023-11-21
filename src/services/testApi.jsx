@@ -89,19 +89,28 @@ export const { useRegisterUserMutation, useLoginUserMutation, useGetLoggedUserQu
 
 export const testApi1 = createApi({
   reducerPath: 'testApi1',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.arunarchitect.in/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.arunarchitect.in/apiblog' }),
   endpoints: (builder) => ({
+    saveProfile: builder.mutation({
+      query: (blog) => {
+        return {
+          url: 'blog/',
+          method: 'POST',
+          body: blog
+        };
+      }
+    }),
     getResumeprofile: builder.query({
-        query: () => {
-          return {
-            url: 'list/',
-            method: 'GET',
-          };
-        }
-      })
+      query: () => {
+        return {
+          url: 'list/',
+          method: 'GET',
+        };
+      }
+    })
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetResumeprofileQuery } = testApi1
+export const { useSaveProfileMutation, useGetResumeprofileQuery } = testApi1
