@@ -140,7 +140,7 @@ const Dashboard = () => {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-            <Card sx={{ width: '100%', height: { xs: 500, sm: 615, md: 615, lg: 615 } }} className="gradient3">
+            <Card sx={{ width: '100%', height: { xs: 650, sm: 615, md: 615, lg: 615 } }} className="gradient3">
               <CardContent>
                 <h5>New Blog Article</h5>
                 <Box component="form" sx={{p:3}} noValidate id='resume-form' onSubmit={handleSubmit}>
