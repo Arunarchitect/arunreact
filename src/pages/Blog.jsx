@@ -126,7 +126,7 @@ const Blog = () => {
                   component="img"
                   alt={blog.title}
                   height="140"
-                  image={`http://127.0.0.1:8000/${blog.bimage}`}
+                  image={`https://api.arunarchitect.in/${blog.bimage}`}
                 />
               </Link>
               <CardContent>
