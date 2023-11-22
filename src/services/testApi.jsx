@@ -107,10 +107,23 @@ export const testApi1 = createApi({
           method: 'GET',
         };
       }
-    })
+    }),
+    updateProfile: builder.mutation({
+      query: ({ id, title, subtitle, content }) => ({
+        url: `/blog/update/${id}`, // Adjust the endpoint URL based on your API
+        method: 'PUT',
+        body: { title, subtitle, content },
+      }),
+    }),
+    deleteProfile: builder.mutation({
+      query: (id) => ({
+        url: `blog/${id}/`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useSaveProfileMutation, useGetResumeprofileQuery } = testApi1
+export const { useSaveProfileMutation, useGetResumeprofileQuery, useDeleteProfileMutation,useUpdateProfileMutation } = testApi1

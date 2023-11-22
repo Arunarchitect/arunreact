@@ -15,6 +15,7 @@ import Schedule from "./pages/tools/Schedule"
 import Blog from "./pages/Blog"
 import Post from "./pages/blog/Post"
 import Projects from "./pages/pro/Projects"
+import EditPost from "./pages/blog/EditPost"
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/menu" element={<Menu />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/post/:id" element={<Post />} />
+            <Route path="/edit/:blogId" element={<EditPost />} />
             <Route path="/test" element={<Test />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/schedule" element={<Schedule />} />

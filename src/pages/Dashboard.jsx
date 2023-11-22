@@ -67,14 +67,14 @@ const Dashboard = () => {
 
   //RTK Query
   const [saveProfile] = useSaveProfileMutation()
-  const { data: resumeData, isSuccess: isResumeSuccess } = useGetResumeprofileQuery();
+  const { data: resumeData, isSuccess: isResumeSuccess, refetch } = useGetResumeprofileQuery();
 
   // Update the subsequent useEffect
   useEffect(() => {
     if (resumeData && isResumeSuccess) {
       setBlogs(resumeData.blogs);
     }
-  }, [resumeData, isResumeSuccess]);
+  }, [resumeData, isResumeSuccess, refetch]);
 
 
   const handleSubmit = async (e) => {
@@ -93,6 +93,7 @@ const Dashboard = () => {
       if (res.data.status === 'success') {
         setError({ status: true, msg: 'Uploaded Successfully', type: 'success' });
         resetForm();
+        refetch();
       }
     } else {
       setError({ status: true, msg: 'All fields are required', type: 'error' });
