@@ -21,15 +21,17 @@ const Dashboard = () => {
     name: ''
   });
 
-  const [blogs, setBlogs] = useState([])
+  const [blogs, setBlogs] = useState([]);
 
-  const resetForm = () =>{
-    setTitle('')
-    setSubtitle('')
-    setContent('')
-    setBimage('')
-    document.getElementById('resume-form').reset()
-  }
+  const resetForm = () => {
+    setTitle('');
+    setSubtitle('');
+    setContent('');
+    setBimage('');
+    setPreviewImage(null);
+    setIsImageSelected(false);
+    document.getElementById('resume-form').reset();
+  };
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -53,52 +55,80 @@ const Dashboard = () => {
     display: 'none',
   });
 
-  const [error, setError]= useState({
-    status:false,
-    msg:"",
-    type:"",
-  })
-
+  const [error, setError] = useState({
+    status: false,
+    msg: "",
+    type: "",
+  });
 
   const [title, setTitle] = useState();
   const [subtitle, setSubtitle] = useState();
   const [content, setContent] = useState();
   const [bimage, setBimage] = useState();
+  const [previewImage, setPreviewImage] = useState(null);
+  const [isImageSelected, setIsImageSelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
 
-  //RTK Query
-  const [saveProfile] = useSaveProfileMutation()
+  const [saveProfile] = useSaveProfileMutation();
   const { data: resumeData, isSuccess: isResumeSuccess, refetch } = useGetResumeprofileQuery();
 
-  // Update the subsequent useEffect
   useEffect(() => {
     if (resumeData && isResumeSuccess) {
       setBlogs(resumeData.blogs);
     }
   }, [resumeData, isResumeSuccess, refetch]);
 
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage.size > 1 * 1024 * 1024) {
+      alert('Image size exceeds the limit (1MB). Please choose a smaller image.');
+      return;
+    }
+    const previewURL = selectedImage ? URL.createObjectURL(selectedImage) : null;
+
+    setBimage(selectedImage);
+    setIsLoading(true);
+
+    // Simulate a delay (replace this with your actual loading logic)
+    setTimeout(() => {
+      setIsLoading(false);
+      setPreviewImage(previewURL);
+      setIsImageSelected(true);
+    }, 1000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('subtitle', subtitle);
-    formData.append('content', content);
-    if (bimage) {
-      formData.append('bimage', bimage);
-    }
-
-    if (title && subtitle && content) {
-      const res = await saveProfile(formData);
-      console.log(res)
-      if (res.data.status === 'success') {
-        setError({ status: true, msg: 'Uploaded Successfully', type: 'success' });
-        resetForm();
-        refetch();
+  
+    if (title && subtitle && content && isImageSelected) {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('subtitle', subtitle);
+      formData.append('content', content);
+      if (bimage) {
+        formData.append('bimage', bimage);
+      }
+  
+      try {
+        const res = await saveProfile(formData);
+  
+        if (res && res.data && res.data.status === 'success') {
+          setError({ status: true, msg: 'Uploaded Successfully', type: 'success' });
+          resetForm();
+          refetch();
+        } else {
+          setError({ status: true, msg: 'Upload Failed', type: 'error' });
+        }
+      } catch (error) {
+        // Handle other errors
+        console.error('Error during form submission:', error);
+        setError({ status: true, msg: 'An error occurred', type: 'error' });
       }
     } else {
-      setError({ status: true, msg: 'All fields are required', type: 'error' });
+      setError({ status: true, msg: 'All fields are required, and an image must be selected', type: 'error' });
     }
   };
+  
 
   const handleLogout = () => {
     dispatch(unsetUserInfo({ name: '', email: '' }));
@@ -106,8 +136,6 @@ const Dashboard = () => {
     removeToken();
     navigate('/login');
   };
-
-
 
   return (
     <Layout>
@@ -124,14 +152,14 @@ const Dashboard = () => {
                 <Typography variant="h5">Email: {userData.email}</Typography>
                 <Typography variant="h6">Hi {userData.name}, Welcome to the world of Modelflick</Typography>
                 <Stack direction='row' alignItems='center' spacing={4}>
-                <Button variant="contained" color="warning" size="large" onClick={handleLogout} sx={{ mt: 8 }}>
-                  Logout
-                </Button>
-                <Button variant="contained" color="warning" size="large" component={NavLink} to={'/projects'}  sx={{ mt: 8 }}>
-                  My Projects
-                </Button>
+                  <Button variant="contained" color="warning" size="large" onClick={handleLogout} sx={{ mt: 8 }}>
+                    Logout
+                  </Button>
+                  <Button variant="contained" color="warning" size="large" component={NavLink} to={'/projects'} sx={{ mt: 8 }}>
+                    My Projects
+                  </Button>
                 </Stack>
-                
+
               </CardContent>
             </Card>
             <Card sx={{ width: '100%', height: { xs: 300, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className="gradient3">
@@ -144,31 +172,51 @@ const Dashboard = () => {
             <Card sx={{ width: '100%', height: { xs: 650, sm: 615, md: 615, lg: 615 } }} className="gradient3">
               <CardContent>
                 <h5>New Blog Article</h5>
-                <Box component="form" sx={{p:3}} noValidate id='resume-form' onSubmit={handleSubmit}>
+                <Box component="form" sx={{ p: 3 }} noValidate id='resume-form' onSubmit={handleSubmit}>
                   <Typography variant="h5">Post</Typography>
                   <Typography variant="h6">Create Post</Typography>
 
                   <TextField
-                    id="title"  required fullWidth margin='normal' label='Title'  onChange={(e)=>{setTitle(e.target.value)}}
+                    id="title" required fullWidth margin='normal' label='Title' onChange={(e) => { setTitle(e.target.value) }}
                   />
                   <TextField
-                    id="subtitle"  required fullWidth margin='normal' label='SubTitle'  onChange={(e)=>{setSubtitle(e.target.value)}}
+                    id="subtitle" required fullWidth margin='normal' label='SubTitle' onChange={(e) => { setSubtitle(e.target.value) }}
                   />
                   <TextField
-                    id="content"  required fullWidth multiline rows={4} margin='normal' label='Content'  onChange={(e)=>{setContent(e.target.value)}}
+                    id="content" required fullWidth multiline rows={4} margin='normal' label='Content' onChange={(e) => { setContent(e.target.value) }}
                   />
-                  <label htmlFor="profile-photo">
-                    <Input accept="image/*" id='profile-photo' type="file" onChange={(e)=>{setBimage(e.target.files[0])}}/>
-                      <Button variant='contained' component='span'>Upload Image</Button>
 
-                  </label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
+                    <label htmlFor="profile-photo">
+                      <Input accept="image/*" id='profile-photo' type="file" onChange={handleImageChange} />
+                      <Button variant='contained' component='span'>Upload Image</Button>
+                    </label>
+
+                    {/* Display a loading spinner while the image is loading */}
+                    {isLoading && <div className="loading-spinner"></div>}
+
+                    {/* Display image preview when available */}
+                    {!isLoading && previewImage && (
+                      <img src={previewImage} alt="Preview" style={{ maxWidth: '10%' }} />
+                    )}
+
+                    {/* Display animated tick mark when the image is selected */}
+                    {isImageSelected && (
+                      <div className="tick-mark-animation">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="green" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
                   <Box>
-                    <Button type='submit' variant='contained' sx={{mt:3, mb:2, px:5}} color='error'>Submit</Button>
-                    {error.status ? <Alert severity={error.type}>{error.msg}</Alert>:''}  
-                  </Box> 
+                    <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, px: 5 }} color="error" disabled={!isImageSelected}>
+                      Submit
+                    </Button>
+                    {error.status ? <Alert severity={error.type}>{error.msg}</Alert> : ''}
+                  </Box>
                 </Box>
-                  
-      
               </CardContent>
             </Card>
           </Grid>
