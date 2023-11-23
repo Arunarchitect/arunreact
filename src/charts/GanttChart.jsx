@@ -1,86 +1,48 @@
 import React from "react";
-import {
-  Chart as ChartJS,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, BarController, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import 'chartjs-adapter-date-fns';
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+ChartJS.register(BarController, CategoryScale, LinearScale, Tooltip, Legend);
 
-
-function GanttChart({ title, budget, unit, onEntryValueChange }) {
-  const costSplitLabel = ["Planning", "Structure", "Mechanical", "Electrical", "Plumbing", "Painting", "Furnishing"];
-  let entry;
-
-  if (unit === "squareMeter") {
-    // If "Square Meter" unit is selected, convert title to square feet 
-    title = title * 10.67;
-  }
-
-  if (budget === "low") {
-    entry = 2000 * title;
-  } else if (budget === "medium") {
-    entry = 3000 * title;
-  } else if (budget === "high") {
-    entry = 4000 * title;
-  }
-  onEntryValueChange(entry);
-  
-  // console.log("Title:", title);
-  // console.log("Budget:", budget);
-  // console.log("Entry:", entry);
-
-  const costSplitData = [0.05* entry, 0.1* entry, 0.15* entry, 0.05* entry, 0.15* entry, 0.3* entry, 0.1* entry]
-  
+function GanttChart() {
   const data = {
-    labels: costSplitLabel,
+    labels: ["Project1", 'taks2'],
     datasets: [
       {
-        label: budget,
-        data: costSplitData,
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-          "rgba(255, 205, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-        ],
-        borderColor: [
-          "rgb(255, 99, 132)",
-          "rgb(255, 159, 64)",
-          "rgb(255, 205, 86)",
-          "rgb(75, 192, 192)",
-          "rgb(54, 162, 235)",
-          "rgb(153, 102, 255)",
-          "rgb(255, 99, 132)",
-
-        ],
+        label: "Planning",
+        data: [{ x: '2022-10-01', y: 'Tak1', base: 0 }],
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
         borderWidth: 1,
-      },
+      }
     ],
   };
 
-  // Add console.log statements to log data and options
-  // console.log("Data Object:", data);
-
-  const options = {};
-
-  // Add a console.log statement to log the options object
-  // console.log("Options Object:", options);
+  const options = {
+    scales: {
+      x: {
+        type: "linear",
+        time:{
+            unit:'day'
+        },
+        position: "bottom",
+        min: 0,
+        max: 1, // Adjust the max value based on your timeline
+      },
+      y: {
+        type: "category",
+        position: "left",
+        offset: true,
+      },
+    },
+  };
 
   return (
     <div>
-      <Bar data={data} options={options} />      
+      <Bar data={data} options={options} />
     </div>
   );
 }
-
-
 
 export default GanttChart;
