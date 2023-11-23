@@ -4,7 +4,7 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Pagenotfound from './pages/Pagenotfound'
-import Menu from './pages/Menu'
+import Tools from './pages/Tools'
 import Test from "./pages/tools/Test"
 import LoginReg from "./pages/auth/LoginReg"
 import SendPasswordResetEmail from "./pages/auth/SendPasswordResetEmail"
@@ -16,6 +16,7 @@ import Blog from "./pages/Blog"
 import Post from "./pages/blog/Post"
 import Projects from "./pages/pro/Projects"
 import EditPost from "./pages/blog/EditPost"
+import Scheduler from "./pages/tools/Scheduler"
 
 
 function App() {
@@ -27,13 +28,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/menu" element={<Menu />} />
+            <Route path="/tools" element={<Tools />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/post/:id" element={<Post />} />
             <Route path="/edit/:blogId" element={<EditPost />} />
             <Route path="/test" element={<Test />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/schedule" element={<Schedule />} />
+            <Route path="/scheduler" element={<Scheduler />} />
             <Route path="/login" element={!access_token ? <LoginReg /> : <Navigate to='/dashboard' />} />
             <Route path='resetpass' element={<SendPasswordResetEmail />} />
             <Route path='apis/user/reset-password/:id/:token' element={<ResetPassword />} />

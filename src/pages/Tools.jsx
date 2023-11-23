@@ -14,7 +14,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import '../styles/Dash.css';
 import constructImage from '../images/construct.png';
 
-const Menu = () => {
+const Tools = () => {
   const imageSource = constructImage;
 
   const [isRotated, setIsRotated] = useState(false);
@@ -52,7 +52,7 @@ const Menu = () => {
 
   const tools = [
     { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/test' },
-    { title: 'Advisory Engine', subheader: 'Get expert advice', avatarLabel: 'A', route: '/schedule' },
+    { title: 'Project Scheduler', subheader: 'Get instantaneous schedules', avatarLabel: 'S', route: '/scheduler' },
     { title: 'Regulatory Compliance', subheader: 'Ensure compliance', avatarLabel: 'R', route: '/schedule' },
     { title: 'Design Recommender', subheader: 'Optimize designs', avatarLabel: 'D', route: '/schedule' },
     { title: 'Data Analysis Suite', subheader: 'Analytical insights', avatarLabel: 'D', route: '/schedule' },
@@ -109,4 +109,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default Tools;
