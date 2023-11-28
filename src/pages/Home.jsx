@@ -10,7 +10,7 @@ const Home = () => {
         <div className='home' style={{ backgroundImage: `url(${Construct})`, height: '100vh' }}>
           <div className="headerContainer">
             <h1>Modelflick</h1>
-            <p>Design Assistance</p>
+            <p>Design Assistance!</p>
             <Link to="/menu">
             <button>
               Explore our Tools!
