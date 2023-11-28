@@ -111,7 +111,7 @@ const Test = () => {
               <CardContent>
                 <h2>Budget Split</h2>
                 <BarChart title={displayedValue} budget={budget} unit={selectedUnit} onEntryValueChange={handleEntryValueChange} />
-                <PdfGenerator displayedValue={displayedValue} />
+                <PdfGenerator displayedValue={displayedValue} budget={budget} entryValue={entryValue} selectedUnit={selectedUnit} />
               </CardContent>
             </Card>
           </Grid>

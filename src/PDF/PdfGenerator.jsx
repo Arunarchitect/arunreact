@@ -6,7 +6,7 @@ import './PdfGenerator.css';
 import constructImage from '../images/construct.png'; // Update the path accordingly
 import { Button } from '@mui/material';
 
-function PdfGenerator({ displayedValue }) {
+function PdfGenerator({ displayedValue, entryValue, budget, selectedUnit}) {
   const jspdf = new jsPDF('p', 'pt', 'letter');
 
   const handleSubmit = (e) => {
@@ -30,7 +30,7 @@ function PdfGenerator({ displayedValue }) {
 
 
     // Include the displayedValue in the formatted content
-    const formattedContent = `<div style="font-family: 'Times New Roman'; font-style: italic; font-size: 16px;"><span style="white-space: nowrap;">${h5Content}</span></div><br/><p>Project Gist: ${displayedValue}</p><img src="${image.src}" />`;
+    const formattedContent = `<div style="font-family: 'Times New Roman'; font-style: italic; font-size: 16px;"><span style="white-space: nowrap;">${h5Content}</span></div><br/><p style="white-space: nowrap;font-size:12px;">Your desired project built up area is  ${displayedValue} ${selectedUnit === 'squareFeet' ? 'sq.ft' : 'sq.m'}. </p><p style="white-space: nowrap;font-size:12px;">For a ${budget} budget it can cost about ${entryValue} rupees to execute it.</p><img src="${image.src}" />`;
 
     jspdf.html(formattedContent, data);
   };
@@ -38,6 +38,7 @@ function PdfGenerator({ displayedValue }) {
   return (
     <div>
       {/* Removed unnecessary elements */}
+      <h5>Project Gist:</h5>
       <Button type="submit" variant="contained" onClick={handleSubmit}>
         Generate PDF
       </Button>
