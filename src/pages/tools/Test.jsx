@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+// Test.js
+
+import React, { useState, useEffect } from 'react';
 import Layout from '../../components/layout/Layout'
-import { Box, Typography, FormControlLabel, InputLabel, Select, MenuItem, Button, TextField, RadioGroup, Radio } from '@mui/material'
-import { Grid, Card, CardActionArea, CardMedia, CardContent } from '@mui/material'
-import Stack from '@mui/material/Stack'
-import '../../styles/Dash.css'
+import { Box, Card, CardContent, Typography, FormControlLabel, InputLabel, Select, MenuItem, Button, TextField, RadioGroup, Radio } from '@mui/material'
+import { Grid } from '@mui/material'
 import BarChart from '../../charts/BarChart';
-import { FormControl } from '@mui/base/FormControl'
 import PdfGenerator from '../../PDF/PdfGenerator';
 
 const Test = () => {
@@ -14,6 +13,7 @@ const Test = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [budget, setBudget] = useState('medium');
   const [selectedUnit, setSelectedUnit] = useState('squareFeet'); // Default unit
+  const [entryValue, setEntryValue] = useState(0);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -27,13 +27,11 @@ const Test = () => {
     }
   };
 
-  const [entryValue, setEntryValue] = useState(0);
-
-  // ...
-
   const handleEntryValueChange = (value) => {
-    // Update the entry value when it changes in the BarChart component
-    setEntryValue(value);
+    // Update the entry value asynchronously
+    setTimeout(() => {
+      setEntryValue(value);
+    });
   };
 
   const handleBudgetChange = (event) => {
@@ -50,6 +48,11 @@ const Test = () => {
     }
   };
 
+  useEffect(() => {
+    // Update the entry value when it changes in the BarChart component
+    setEntryValue(entryValue);
+  }, [entryValue]);
+
   return (
     <Layout>
       <Box sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: 'gray' }}>
@@ -58,57 +61,48 @@ const Test = () => {
             <Card sx={{ width: '100%', height: { xs: 240, sm: 300, md: 300, lg: 300 } }} className='gradient3'>
               <CardContent>
                 <h2>Enter your built-up area</h2>
-                <FormControl>
-                  <Box row='true'>
-                    <TextField
-                      type="text"
-                      value={inputValue}
-                      placeholder="Enter a positive integer"
-                      onChange={handleInputChange}
-                    />
-                    <RadioGroup
-                      row
-                      aria-label="unit"
-                      name="unit"
-                      value={selectedUnit}
-                      onChange={handleUnitChange}
-                    >
-                      <FormControlLabel value="squareFeet" control={<Radio />} label="Square Feet" />
-                      <FormControlLabel value="squareMeter" control={<Radio />} label="Square Meter" />
-                    </RadioGroup>
-                  </Box>
-                  
-                  <InputLabel htmlFor="budget">Budget</InputLabel>
-                  <Select
-                    value={budget}
-                    onChange={handleBudgetChange}
-                    displayEmpty // This property will display the placeholder
-                    inputProps={{
-                      id: 'budget',
-                    }}
-                  >
-                    <MenuItem value="" disabled>
-                      Choose your budget
-                    </MenuItem>
-                    <MenuItem value="low">Low Budget</MenuItem>
-                    <MenuItem value="medium">Medium Budget</MenuItem>
-                    <MenuItem value="high">High Budget</MenuItem>
-                  </Select>
-                  
-                  <Button variant="contained" onClick={handleSubmit}>
-                    Submit
-                  </Button>
-                </FormControl>
+                <TextField
+                  type="text"
+                  value={inputValue}
+                  placeholder="Enter a positive integer"
+                  onChange={handleInputChange}
+                />
+                <RadioGroup
+                  row
+                  aria-label="unit"
+                  name="unit"
+                  value={selectedUnit}
+                  onChange={handleUnitChange}
+                >
+                  <FormControlLabel value="squareFeet" control={<Radio />} label="Square Feet" />
+                  <FormControlLabel value="squareMeter" control={<Radio />} label="Square Meter" />
+                </RadioGroup>
+                <InputLabel htmlFor="budget">Budget</InputLabel>
+                <Select
+                  value={budget}
+                  onChange={handleBudgetChange}
+                  displayEmpty
+                  inputProps={{
+                    id: 'budget',
+                  }}
+                >
+                  <MenuItem value="" disabled>
+                    Choose your budget
+                  </MenuItem>
+                  <MenuItem value="low">Low Budget</MenuItem>
+                  <MenuItem value="medium">Medium Budget</MenuItem>
+                  <MenuItem value="high">High Budget</MenuItem>
+                </Select>
+                <Button variant="contained" onClick={handleSubmit}>
+                  Submit
+                </Button>
               </CardContent>
             </Card>
             <Card sx={{ width: '100%', height: { xs: 120, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className='gradient3'>
               <CardContent>
                 <h2>Project Gist</h2>
                 <p>Your required area is {displayedValue} {selectedUnit === 'squareFeet' ? 'sq.ft' : 'sq.m'}</p>
-                <p>
-                  Your project can cost a total of Rs.{entryValue}. 
-                </p>
-              
+                <p>Your project can cost a total of Rs.{entryValue}.</p>
               </CardContent>
             </Card>
           </Grid>
@@ -116,8 +110,8 @@ const Test = () => {
             <Card sx={{ width: '100%', height: { xs: 300, sm: 615, md: 615, lg: 615 } }} className='gradient3'>
               <CardContent>
                 <h2>Budget Split</h2>
-                <BarChart title={displayedValue} budget={budget} unit={selectedUnit} onEntryValueChange={handleEntryValueChange} /> {/* Pass displayedValue and selectedUnit as props */}
-                <PdfGenerator />
+                <BarChart title={displayedValue} budget={budget} unit={selectedUnit} onEntryValueChange={handleEntryValueChange} />
+                <PdfGenerator displayedValue={displayedValue} />
               </CardContent>
             </Card>
           </Grid>

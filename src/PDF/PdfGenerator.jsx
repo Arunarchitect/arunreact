@@ -1,15 +1,16 @@
+// PdfGenerator.js
+
 import React from 'react';
 import { jsPDF } from 'jspdf';
 import './PdfGenerator.css';
 import constructImage from '../images/construct.png'; // Update the path accordingly
 import { Button } from '@mui/material';
 
-function PdfGenerator() {
+function PdfGenerator({ displayedValue }) {
   const jspdf = new jsPDF('p', 'pt', 'letter');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const val = e.target.txt.value;
 
     const data = {
       callback: function (jspdf) {
@@ -22,24 +23,24 @@ function PdfGenerator() {
     const image = new Image();
     image.src = constructImage;
 
-    const h5Content = document.querySelector('h5').innerText.replace(/\n/g, ' ');
+    const h5Element = document.querySelector('h5');
+    const h5Content = h5Element ? h5Element.innerText.replace(/\n/g, ' ') : '';
 
-    // to display the words headings etc continuous in a line , Use <span> with the properties whitespace nowrap etc.
+    // Rest of the code...
 
-    const formattedContent = `<div style="font-family: 'Times New Roman'; font-style: italic; font-size: 16px;"><span style="white-space: nowrap;">${h5Content}</span></div><br/><span style="white-space: nowrap;">${val}</span><br/><img src="${image.src}" />`;
+
+    // Include the displayedValue in the formatted content
+    const formattedContent = `<div style="font-family: 'Times New Roman'; font-style: italic; font-size: 16px;"><span style="white-space: nowrap;">${h5Content}</span></div><br/><p>Project Gist: ${displayedValue}</p><img src="${image.src}" />`;
 
     jspdf.html(formattedContent, data);
   };
 
   return (
     <div>
-      <h5>Print Report</h5>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <textarea  className="txt" name="txt" />
-        <Button type="submit" variant="contained">
-          Generate
-        </Button>
-      </form>
+      {/* Removed unnecessary elements */}
+      <Button type="submit" variant="contained" onClick={handleSubmit}>
+        Generate PDF
+      </Button>
     </div>
   );
 }
