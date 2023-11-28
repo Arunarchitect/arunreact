@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import '../../styles/Dash.css'
 import BarChart from '../../charts/BarChart';
 import { FormControl } from '@mui/base/FormControl'
+import PdfGenerator from '../../PDF/PdfGenerator';
 
 const Test = () => {
   const [inputValue, setInputValue] = useState('');
@@ -116,6 +117,7 @@ const Test = () => {
               <CardContent>
                 <h2>Budget Split</h2>
                 <BarChart title={displayedValue} budget={budget} unit={selectedUnit} onEntryValueChange={handleEntryValueChange} /> {/* Pass displayedValue and selectedUnit as props */}
+                <PdfGenerator />
               </CardContent>
             </Card>
           </Grid>

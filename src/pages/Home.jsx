@@ -11,7 +11,7 @@ const Home = () => {
           <div className="headerContainer">
             <h1>Modelflick</h1>
             <p>Design Assistance!</p>
-            <Link to="/menu">
+            <Link to="/tools">
             <button>
               Explore our Tools!
             </button>
