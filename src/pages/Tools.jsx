@@ -53,8 +53,9 @@ const Tools = () => {
   const tools = [
     { title: 'Cost Analyzer', subheader: 'Analyze project costs', avatarLabel: 'C', route: '/test' },
     { title: 'Project Scheduler', subheader: 'Get instantaneous schedules', avatarLabel: 'S', route: '/scheduler' },
+    { title: 'Employee Manager', subheader: 'Empoyee and work database', avatarLabel: 'E', route: '/employee' },
     { title: 'Regulatory Compliance', subheader: 'Ensure compliance', avatarLabel: 'R', route: '/schedule' },
-    { title: 'Design Recommender', subheader: 'Optimize designs', avatarLabel: 'D', route: '/schedule' },
+    
     { title: 'Data Analysis Suite', subheader: 'Analytical insights', avatarLabel: 'D', route: '/schedule' },
     { title: 'Project Evaluation', subheader: 'Evaluate project viability', avatarLabel: 'P', route: '/schedule' },
   ];
