@@ -6,9 +6,11 @@ import { Grid } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';  // Import dayjs library
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { useGetJobprofileQuery } from '../../services/jobApi';
+import { useGetJobprofileQuery, useSaveProfileMutation, useGetProjectprofileQuery , useGetWorkprofileQuery} from '../../services/jobApi';
 import moment from 'moment';
+import { useState } from 'react';
 
 
 
@@ -16,8 +18,17 @@ import moment from 'moment';
 
 const Employee = () => {
 
-  const { data } = useGetJobprofileQuery();
-  const jobs = data ? data.jobs : []; 
+  const { data: jobData } = useGetJobprofileQuery(); // Rename data to jobData
+  const { data: projectData } = useGetProjectprofileQuery(); // Assuming useGetProjectsQuery is a separate hook for fetching projects
+  const { data: taskData } = useGetWorkprofileQuery(); 
+
+  const jobs = jobData ? jobData.jobs : [];
+  const projects = projectData ? projectData.projects : []; 
+  console.log('projectData:', projectData);
+
+  const tasks = taskData ? taskData.work : []; 
+  console.log('taskData:', taskData);
+
 
   const calculateTotalHours = (startTime, endTime) => {
     const startMoment = moment(startTime);
@@ -35,6 +46,41 @@ const Employee = () => {
       grandTotal += parseFloat(calculateTotalHours(job.start_time, job.end_time));
     });
     return grandTotal.toFixed(2);
+  };
+
+  const saveProfileMutation = useSaveProfileMutation();
+
+  // State variables for form data
+  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedWork, setSelectedWork] = useState('');
+  const [startTime, setStartTime] = useState(dayjs());  // Initialize with dayjs()
+  const [endTime, setEndTime] = useState(dayjs());      // Initialize with dayjs()
+
+  const handleAddWorkData = async () => {
+    // Prepare the data object in the correct JSON format
+    const postData = {
+      project: {
+        id: selectedProject,
+        name: `Project ${selectedProject}`, // Replace with the actual project name logic
+      },
+      work: {
+        id: selectedWork,
+        name: `Work ${selectedWork}`, // Replace with the actual work name logic
+      },
+      start_time: startTime.toISOString(),
+      end_time: endTime.toISOString(),
+    };
+
+    try {
+      // Make the POST request using the save profile mutation hook
+      const response = await saveProfileMutation.mutateAsync(postData);
+
+      // Handle the response, e.g., show success message or navigate to another page
+      console.log('Job posted successfully:', response);
+    } catch (error) {
+      // Handle the error, e.g., show error message to the user
+      console.error('Error posting job:', error);
+    }
   };
 
 
@@ -89,58 +135,76 @@ const Employee = () => {
                 <Typography variant="h6">Record your Work</Typography>
 
                 <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
-                    <div>
-                    <InputLabel htmlFor="budget1">Project</InputLabel>
-                    <Select
+                {/* Project Dropdown */}
+                {/* Project Dropdown */}
+                <div>
+                  <InputLabel htmlFor="projectDropdown">Project</InputLabel>
+                  <Select
                     sx={{ width: '100%', height: '40px', padding: 1 }}
-                    id="budget1"
-                    defaultValue="" // Set the default value to an available option (in this case, an empty string)
-                    >
+                    id="projectDropdown"
+                    value={selectedProject}
+                    onChange={(e) => setSelectedProject(e.target.value)}
+                  >
                     <MenuItem value="" disabled>
-                        Choose your Project
+                      Choose your Project
                     </MenuItem>
-                    <MenuItem value="low">Project 1</MenuItem>
-                    <MenuItem value="medium">Project 2</MenuItem>
-                    <MenuItem value="high">Project 3</MenuItem>
-                    </Select>
-                    </div>
-
-                    <div>
-                    <InputLabel htmlFor="budget1">Work</InputLabel>
-                    <Select
-                    sx={{ width: '100%', height: '40px', padding: 1 }}
-                    id="budget1"
-                    defaultValue="" // Set the default value to an available option (in this case, an empty string)
-                    >
-                    <MenuItem value="" disabled>
-                        Choose your Work
-                    </MenuItem>
-                    <MenuItem value="low">Work 1</MenuItem>
-                    <MenuItem value="medium">Work 2</MenuItem>
-                    <MenuItem value="high">Work 3</MenuItem>
-                    </Select>
-                    </div>
+                    {projectData && projectData.jobs && projectData.jobs.map((project) => (
+                      <MenuItem key={project.id} value={project.id}>
+                        {project.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </div>
 
 
+
+                {/* Work Dropdown */}
+                <div>
+                  <InputLabel htmlFor="workDropdown">Work</InputLabel>
+                  <Select
+                    sx={{ width: '100%', height: '40px', padding: 1 }}
+                    id="workDropdown"
+                    value={selectedWork}
+                    onChange={(e) => setSelectedWork(e.target.value)}
+                  >
+                    <MenuItem value="" disabled>
+                      Choose your Project
+                    </MenuItem>
+                    {taskData && taskData.jobs && taskData.jobs.map((task) => (
+                      <MenuItem key={task.id} value={task.id}>
+                        {task.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+
+                {/* Start Time DateTimePicker */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                    label='Start Time'
-                    required 
-                    sx={{ width: '48%', padding:1 }} // Set the width to 50%
-                />
+                  <DateTimePicker
+                    label="Start Time"
+                    required
+                    sx={{ width: '48%', padding: 1 }}
+                    value={startTime}
+                    onChange={(value) => setStartTime(value)}
+                  />
                 </LocalizationProvider>
 
+                {/* End Time DateTimePicker */}
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                    label='End Time'
-                    required 
-                    sx={{ width: '48%', padding:1 }} // Set the width to 50%
-                />
+                  <DateTimePicker
+                    label="End Time"
+                    required
+                    sx={{ width: '48%', padding: 1 }}
+                    value={endTime}
+                    onChange={(value) => setEndTime(value)}
+                  />
                 </LocalizationProvider>
-                <Button variant="contained" sx={{  padding:2 }} >
+
+                {/* Button to Add work data */}
+                <Button variant="contained" sx={{ padding: 2 }} onClick={handleAddWorkData}>
                   Add work data
                 </Button>
+              </div>
 
             </CardContent>
           </Card>

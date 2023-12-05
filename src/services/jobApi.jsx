@@ -7,11 +7,11 @@ export const jobApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/apijob/jobs' }),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
-      query: (blog) => {
+      query: (job) => {
         return {
-          url: 'projects/',
+          url: 'create/',
           method: 'POST',
-          body: blog
+          body: job
         };
       }
     }),
@@ -19,6 +19,22 @@ export const jobApi = createApi({
       query: () => {
         return {
           url: 'list/',
+          method: 'GET',
+        };
+      }
+    }),
+    getProjectprofile: builder.query({
+      query: () => {
+        return {
+          url: 'project/',
+          method: 'GET',
+        };
+      }
+    }),
+    getWorkprofile: builder.query({
+      query: () => {
+        return {
+          url: 'work/',
           method: 'GET',
         };
       }
@@ -34,4 +50,4 @@ export const jobApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useGetJobprofileQuery, useSaveProfileMutation} = jobApi
+export const {useGetProjectprofileQuery,useGetWorkprofileQuery, useGetJobprofileQuery, useSaveProfileMutation} = jobApi
