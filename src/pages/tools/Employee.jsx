@@ -26,6 +26,9 @@ const Employee = () => {
   const { data: taskData } = useGetWorkprofileQuery(); 
   const [saveProfile] = useSaveProfileMutation();
 
+
+
+
   // excel export function
   const tableref = useRef(null)
   const data = [
@@ -129,6 +132,7 @@ const Employee = () => {
       pstartdate: new Date(),
       penddate: new Date(),
     });
+    document.getElementById('project-form').reset();
   };
 
   const handleSubmit = async (e) => {
@@ -136,24 +140,28 @@ const Employee = () => {
   
     // Check if all required fields are filled
     if (pproject && pproject.id && pproject.name && pwork && pwork.id && pwork.name && pstartdate && penddate) {
-      const formData = new FormData();
-      formData.append('project[id]', pproject.id);
-      formData.append('project[name]', pproject.name);
-      formData.append('work[id]', pwork.id);
-      formData.append('work[name]', pwork.name);
-      formData.append('start_time', dayjs(pstartdate).format("YYYY-MM-DDTHH:mm:ss[Z]"));
-      formData.append('end_time', dayjs(penddate).format("YYYY-MM-DDTHH:mm:ss[Z]"));
-
+      const payload = {
+        project: {
+          id: pproject.id,
+          name: pproject.name,
+        },
+        work: {
+          id: pwork.id,
+          name: pwork.name,
+        },
+        start_time: dayjs(pstartdate).format("YYYY-MM-DDTHH:mm:ss[Z]"),
+        end_time: dayjs(penddate).format("YYYY-MM-DDTHH:mm:ss[Z]"),
+      };
   
-      console.log("Form Data:", formData); // Log the form data to the console for debugging
+      console.log("Payload:", payload); // Log the payload to the console for debugging
+  
   
       try {
-        const res = await saveProfile(formData);
+        const res = await saveProfile(payload);
   
         if (res && res.data && res.data.status === 'success') {
           setError({ status: true, msg: 'Uploaded Successfully', type: 'success' });
           resetForm(); // Reset the form after successful submission
-          refetch();
         } else {
           setError({ status: true, msg: 'Upload Failed', type: 'error' });
         }
@@ -266,7 +274,7 @@ const Employee = () => {
           <Grid item xs={12} sm={6} md={6} lg={6}>
           <Card sx={{ width: '100%', height: { xs: 500, sm: 615, md: 615, lg: 665 } }} className='gradient3'>
   <CardContent>
-  <Box component="form" sx={{ p: 3 }} noValidate id='' onSubmit={handleSubmit}>
+  <Box component="form" sx={{ p: 3 }} noValidate id='project-form' onSubmit={handleSubmit} >
     <Typography variant="h5">Add work</Typography>
     <Typography variant="h6">Record your Work</Typography>
 

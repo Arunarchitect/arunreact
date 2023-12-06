@@ -6,14 +6,11 @@ export const jobApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/apijob/jobs' }),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
-      query: (formData) => {
+      query: (job) => {
         return {
           url: 'create/',
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+          body: job,
         };
       },
     }),
