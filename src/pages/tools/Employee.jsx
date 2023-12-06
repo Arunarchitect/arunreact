@@ -1,16 +1,17 @@
 
 import Layout from '../../components/layout/Layout'
-import { Box, Card, CardContent, Typography, FormControlLabel, InputLabel, Select, MenuItem, Button, TextField, RadioGroup, Radio, Table, TableRow, TableCell,
+import { Box, Card, CardContent, Typography, FormControlLabel, InputLabel, Select, MenuItem, Button, TextField, RadioGroup, Radio, Table, TableRow, TableCell, Alert,
   TableContainer, Paper, TableHead, TableBody } from '@mui/material'
 import { Grid } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';  // Import dayjs library
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useGetJobprofileQuery, useSaveProfileMutation, useGetProjectprofileQuery , useGetWorkprofileQuery} from '../../services/jobApi';
 import moment from 'moment';
-import { useState } from 'react';
+import { useState , useRef} from 'react';
+import { useDownloadExcel } from 'react-export-table-to-excel';
 
 
 
@@ -21,13 +22,33 @@ const Employee = () => {
   const { data: jobData } = useGetJobprofileQuery(); // Rename data to jobData
   const { data: projectData } = useGetProjectprofileQuery(); // Assuming useGetProjectsQuery is a separate hook for fetching projects
   const { data: taskData } = useGetWorkprofileQuery(); 
+  const [saveProfile] = useSaveProfileMutation();
+
+  const tableref = useRef(null)
+  const data = [
+    
+  ]
+  const {onDownload} = useDownloadExcel({
+    currentTableRef:tableref.current,
+    filename:'Job_report',
+    sheet: 'UserData'
+  })
+
+
+  
 
   const jobs = jobData ? jobData.jobs : [];
   const projects = projectData ? projectData.projects : []; 
-  console.log('projectData:', projectData);
+  
 
   const tasks = taskData ? taskData.work : []; 
-  console.log('taskData:', taskData);
+  // console.log('taskData:', taskData);
+
+  const [error, setError] = useState({
+    status: false,
+    msg: "",
+    type: "",
+  });
 
 
   const calculateTotalHours = (startTime, endTime) => {
@@ -48,55 +69,80 @@ const Employee = () => {
     return grandTotal.toFixed(2);
   };
 
-  const saveProfileMutation = useSaveProfileMutation();
+  const [pproject, setPproject] = useState('');
+  const [pwork, setPwork] = useState('');
+  const [pstartdate, setPstartdate] = useState(new Date());
+  const [penddate, setPenddate] = useState(new Date());
 
-  // State variables for form data
-  const [selectedProject, setSelectedProject] = useState('');
-  const [selectedWork, setSelectedWork] = useState('');
-  const [startTime, setStartTime] = useState(dayjs());  // Initialize with dayjs()
-  const [endTime, setEndTime] = useState(dayjs());      // Initialize with dayjs()
 
-  const handleAddWorkData = async () => {
-    // Prepare the data object in the correct JSON format
-    const postData = {
-      project: {
-        id: selectedProject,
-        name: `Project ${selectedProject}`, // Replace with the actual project name logic
-      },
-      work: {
-        id: selectedWork,
-        name: `Work ${selectedWork}`, // Replace with the actual work name logic
-      },
-      start_time: startTime.toISOString(),
-      end_time: endTime.toISOString(),
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // console.log('pproject:', pproject);
+    // console.log('pwork:', pwork);
+  
+    // Check if all required fields are filled
+    if (pproject && pwork && pstartdate && penddate) {
+      // Create an object with the required fields
+      const formData = new FormData();
+      formData.append('pproject_id', pproject.id);
+      formData.append('pproject_name', pproject.name);
+      formData.append('pwork_id', pwork.id);
+      formData.append('pwork_name', pwork.name);;
+      formData.append('pstartdate', dayjs(pstartdate).format("YYYY-MM-DDTHH:mm:ssZ"));
+      formData.append('penddate', dayjs(penddate).format("YYYY-MM-DDTHH:mm:ssZ"));
 
-    try {
-      // Make the POST request using the save profile mutation hook
-      const response = await saveProfileMutation.mutateAsync(postData);
+      console.log('FormData:', formData);
+      console.log('pproject:', pproject);
+      console.log('pwork:', pwork);
+      console.log('pstartdate:', pstartdate);
+      console.log('penddate:', penddate);
 
-      // Handle the response, e.g., show success message or navigate to another page
-      console.log('Job posted successfully:', response);
-    } catch (error) {
-      // Handle the error, e.g., show error message to the user
-      console.error('Error posting job:', error);
+
+      try {
+        // Trigger the saveProfile mutation with the form data
+        const res = await saveProfile(formData).catch((error) => {
+          console.error('Error during saveProfile mutation:', error);
+          setError({ status: true, msg: 'An error occurred', type: 'error' });
+        });
+  
+        // Check the response from the server
+        if (res && res.data && res.data.status === 'success') {
+          // Display a success message and reset the form
+          setError({ status: true, msg: 'Uploaded Successfully', type: 'success' });
+          resetForm();
+          refetch(); // Refetch the data to update the job list
+        } else {
+          // Display an error message if the server response indicates failure
+          setError({ status: true, msg: 'Upload Failed', type: 'error' });
+        }
+      } catch (error) {
+        // Handle errors that may occur during the form submission
+        console.error('Error during form submission:', error);
+        setError({ status: true, msg: 'An error occurred', type: 'error' });
+      }
+    } else {
+      // Display an error message if any required field is missing
+      setError({ status: true, msg: 'All fields are required', type: 'error' });
     }
   };
+  
 
+  
+  
 
   return (
     <Layout>
       <Box sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: 'gray' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-          <Card sx={{ width: '100%', height: { xs: 240, sm: 300, md: 300, lg: 300 }, overflow: 'auto' }} className='gradient3'>
+          <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 300 }, overflow: 'auto' }} className='gradient3'>
               <CardContent>
                 <Typography variant="h5">Name</Typography>
                 <Typography variant="h6">Designation</Typography>
                 <Typography variant="h6">Involved Projects</Typography>
               </CardContent>
-              <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
-                <Table>
+              <TableContainer component={Paper} sx={{ overflowX: 'auto' }} >
+                <Table  ref={tableref}>
                   <TableHead>
                     <TableRow>
                       <TableCell>Project Name</TableCell>
@@ -120,94 +166,98 @@ const Employee = () => {
                 </Table>
               </TableContainer>
             </Card>
-            <Card sx={{ width: '100%', height: { xs: 120, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className='gradient3'>
+            <Card sx={{ width: '100%', height: { xs: 200, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className='gradient3'>
               <CardContent>
                 <h2>Work Data Dashboard</h2>
                 <Typography variant="h6">Grand Total Hours: {calculateGrandTotalHours()}</Typography>
                 <Typography variant="h6">Revenue in Rs: {100 * calculateGrandTotalHours()}</Typography>
-              </CardContent>
+                <Button variant="contained" sx={{ width: '100%', padding: 2 }} onClick={onDownload}>
+                  Download Excel Report
+                </Button>
+              </CardContent> 
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-          <Card sx={{ width: '100%', height: { xs: 300, sm: 615, md: 615, lg: 615 } }} className='gradient3'>
-            <CardContent>
-                <Typography variant="h5">Add work</Typography>
-                <Typography variant="h6">Record your Work</Typography>
+          <Card sx={{ width: '100%', height: { xs: 500, sm: 615, md: 615, lg: 615 } }} className='gradient3'>
+  <CardContent>
+    <Typography variant="h5">Add work</Typography>
+    <Typography variant="h6">Record your Work</Typography>
 
-                <div style={{ display: 'flex', gap: '16px', width: '100%' }}>
-                {/* Project Dropdown */}
-                {/* Project Dropdown */}
-                <div>
-                  <InputLabel htmlFor="projectDropdown">Project</InputLabel>
-                  <Select
-                    sx={{ width: '100%', height: '40px', padding: 1 }}
-                    id="projectDropdown"
-                    value={selectedProject}
-                    onChange={(e) => setSelectedProject(e.target.value)}
-                  >
-                    <MenuItem value="" disabled>
-                      Choose your Project
-                    </MenuItem>
-                    {projectData && projectData.jobs && projectData.jobs.map((project) => (
-                      <MenuItem key={project.id} value={project.id}>
-                        {project.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
+    {/* Project Dropdown */}
+    <div style={{ width: '100%' }}>
+      <InputLabel htmlFor="projectDropdown">Project</InputLabel>
+      <Select
+  value={pproject ? pproject.id : ''}
+  onChange={(e) => {
+    const selectedProject = projectData.jobs.find((project) => project.id === e.target.value);
+    setPproject(selectedProject);
+  }}
+  sx={{ width: '100%', height: '40px', padding: 1 }}
+>
+  <MenuItem value="" disabled>
+    Choose your Project
+  </MenuItem>
+  {projectData && projectData.jobs && projectData.jobs.map((project) => (
+    <MenuItem key={project.id} value={project.id}>
+      {project.name}
+    </MenuItem>
+  ))}
+</Select>
+
+    </div>
+
+    {/* Work Dropdown */}
+<div style={{ width: '100%' }}>
+  <InputLabel htmlFor="workDropdown">Work</InputLabel>
+  <Select
+  value={pwork? pwork.id : ''}
+  onChange={(e) => {
+    const selectedWork = taskData.jobs.find((task) => task.id === e.target.value);
+    setPwork(selectedWork);
+  }}
+  sx={{ width: '100%', height: '40px', padding: 1 }}
+>
+  <MenuItem value="" disabled>
+    Choose your Work
+  </MenuItem>
+  {taskData && taskData.jobs && taskData.jobs.map((task) => (
+    <MenuItem key={task.id} value={task.id}>
+      {task.name}
+    </MenuItem>
+  ))}
+</Select>
+</div>
 
 
+    {/* Start Time DateTimePicker */}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DateTimePicker
+        label="Start Time"
+        // value={pstartdate}
+        // onChange={(date) => setPstartdate(date)}
+        required
+        sx={{ width: '100%', padding: 1 }}
+      />
+    </LocalizationProvider>
 
-                {/* Work Dropdown */}
-                <div>
-                  <InputLabel htmlFor="workDropdown">Work</InputLabel>
-                  <Select
-                    sx={{ width: '100%', height: '40px', padding: 1 }}
-                    id="workDropdown"
-                    value={selectedWork}
-                    onChange={(e) => setSelectedWork(e.target.value)}
-                  >
-                    <MenuItem value="" disabled>
-                      Choose your Project
-                    </MenuItem>
-                    {taskData && taskData.jobs && taskData.jobs.map((task) => (
-                      <MenuItem key={task.id} value={task.id}>
-                        {task.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
+    {/* End Time DateTimePicker */}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DateTimePicker
+        label="End Time"
+        // value={penddate}
+        // onChange={(date) => setPenddate(date)}
+        required
+        sx={{ width: '100%', padding: 1 }}
+      />
+    </LocalizationProvider>
 
-                {/* Start Time DateTimePicker */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateTimePicker
-                    label="Start Time"
-                    required
-                    sx={{ width: '48%', padding: 1 }}
-                    value={startTime}
-                    onChange={(value) => setStartTime(value)}
-                  />
-                </LocalizationProvider>
-
-                {/* End Time DateTimePicker */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateTimePicker
-                    label="End Time"
-                    required
-                    sx={{ width: '48%', padding: 1 }}
-                    value={endTime}
-                    onChange={(value) => setEndTime(value)}
-                  />
-                </LocalizationProvider>
-
-                {/* Button to Add work data */}
-                <Button variant="contained" sx={{ padding: 2 }} onClick={handleAddWorkData}>
-                  Add work data
-                </Button>
-              </div>
-
-            </CardContent>
-          </Card>
+    {/* Button to Add work data */}
+    <Button variant="contained" sx={{ width: '100%', padding: 2 }} onClick={handleSubmit}>
+      Add work data
+    </Button>
+    {error.status ? <Alert severity={error.type}>{error.msg}</Alert> : ''}
+  </CardContent>
+</Card>
 
           </Grid>
         </Grid>

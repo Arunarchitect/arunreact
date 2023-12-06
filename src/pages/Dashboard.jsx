@@ -108,7 +108,9 @@ const Dashboard = () => {
       if (bimage) {
         formData.append('bimage', bimage);
       }
-  
+
+      console.log(formData)
+      
       try {
         const res = await saveProfile(formData);
   
