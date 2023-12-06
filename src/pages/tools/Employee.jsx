@@ -10,8 +10,10 @@ import dayjs from 'dayjs';  // Import dayjs library
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useGetJobprofileQuery, useSaveProfileMutation, useGetProjectprofileQuery , useGetWorkprofileQuery} from '../../services/jobApi';
 import moment from 'moment';
-import { useState , useRef} from 'react';
+import { useState , useRef, useEffect} from 'react';
 import { useDownloadExcel } from 'react-export-table-to-excel';
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 
 
@@ -24,6 +26,7 @@ const Employee = () => {
   const { data: taskData } = useGetWorkprofileQuery(); 
   const [saveProfile] = useSaveProfileMutation();
 
+  // excel export function
   const tableref = useRef(null)
   const data = [
     
@@ -34,11 +37,47 @@ const Employee = () => {
     sheet: 'UserData'
   })
 
-
+  //pdf export function
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+  
+    // Title
+    doc.text("Job Report", 20, 10);
+  
+    // Table headers
+    const headers = ["Project Name", "Work Name", "Start Time", "End Time", "Total Hours"];
+  
+    // Table data
+    const data = jobs.map((job) => [
+      job.project.name,
+      job.work.name,
+      moment(job.start_time).format('YYYY-MM-DD HH:mm:ss'),
+      moment(job.end_time).format('YYYY-MM-DD HH:mm:ss'),
+      calculateTotalHours(job.start_time, job.end_time),
+    ]);
+  
+    // Add the table to the PDF
+    doc.autoTable({
+      head: [headers],
+      body: data,
+      startY: 20, // Adjust the starting Y position as needed
+    });
+  
+    // Save the PDF
+    doc.save('Job_Report.pdf');
+  };
+  
   
 
   const jobs = jobData ? jobData.jobs : [];
   const projects = projectData ? projectData.projects : []; 
+
+  // Immediately calculate revenue with the default value
+  useEffect(() => {
+    if (jobs.length > 0) {
+      calculateRevenue();
+    }
+  }, [jobs]); // Trigger when jobs data changes
   
 
   const tasks = taskData ? taskData.work : []; 
@@ -68,6 +107,7 @@ const Employee = () => {
     });
     return grandTotal.toFixed(2);
   };
+
 
   const [pproject, setPproject] = useState('');
   const [pwork, setPwork] = useState('');
@@ -125,6 +165,31 @@ const Employee = () => {
       setError({ status: true, msg: 'All fields are required', type: 'error' });
     }
   };
+
+  //payment calculation
+  const [paymentPerHour, setPaymentPerHour] = useState(100); // Set the default value to 100
+  const [revenue, setRevenue] = useState(0);
+
+  // Immediately calculate revenue with the default value
+  useEffect(() => {
+    calculateRevenue();
+  }, []); // Trigger on component mount
+
+  // Calculate revenue when the component mounts or when paymentPerHour changes
+  useEffect(() => {
+    calculateRevenue();
+  }, [paymentPerHour]); // Trigger when paymentPerHour changes
+
+  const calculateRevenue = () => {
+    const grandTotalHours = parseFloat(calculateGrandTotalHours());
+    const paymentPerHourValue = parseFloat(paymentPerHour || 100); // Use the provided value or default to 100
+    const revenueValue = grandTotalHours * paymentPerHourValue;
+    setRevenue(revenueValue.toFixed(2));
+  };
+
+
+    
+
   
 
   
@@ -166,12 +231,31 @@ const Employee = () => {
                 </Table>
               </TableContainer>
             </Card>
-            <Card sx={{ width: '100%', height: { xs: 200, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 } }} className='gradient3'>
+            <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 ,padding: 2  } }} className='gradient3'>
               <CardContent>
                 <h2>Work Data Dashboard</h2>
                 <Typography variant="h6">Grand Total Hours: {calculateGrandTotalHours()}</Typography>
-                <Typography variant="h6">Revenue in Rs: {100 * calculateGrandTotalHours()}</Typography>
-                <Button variant="contained" sx={{ width: '100%', padding: 2 }} onClick={onDownload}>
+                <Typography variant="h6">Payment per hour</Typography>
+                <TextField
+                  type="number"
+                  value={paymentPerHour}
+                  onChange={(e) => {
+                    setPaymentPerHour(e.target.value);
+                    calculateRevenue(); // Calculate revenue instantly on value change
+                  }}
+                  sx={{ width: '100%', padding: 1 }}
+                />
+
+
+                <Typography variant="h6">Revenue in Rs: {revenue}</Typography>
+
+                <br />
+                <Button variant="contained" sx={{ width: '100%', padding: 1 }} onClick={downloadPdf}>
+                  Download PDF
+                </Button>
+                <br />
+                <br />
+                <Button variant="contained" sx={{ width: '100%', padding: 1 }} onClick={onDownload}>
                   Download Excel Report
                 </Button>
               </CardContent> 
