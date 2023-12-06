@@ -11,7 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';  // Import dayjs library
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { useGetJobprofileQuery, useSaveProfileMutation, useGetProjectprofileQuery , useGetWorkprofileQuery} from '../../services/jobApi';
+import { useGetJobprofileQuery, useSaveProfileMutation, useGetProjectprofileQuery , useGetWorkprofileQuery, useDeleteProfileMutation} from '../../services/jobApi';
 import moment from 'moment';
 import { useState , useRef, useEffect} from 'react';
 import { useDownloadExcel } from 'react-export-table-to-excel';
@@ -205,49 +205,29 @@ const Employee = () => {
     const revenueValue = grandTotalHours * paymentPerHourValue;
     setRevenue(revenueValue.toFixed(2));
   };
+  
 
-  
-  const handleDeleteJob = async (jobId) => {
-    try {
-      // Add the logic to delete the job using your API service
-      // For example, you might have a deleteJob function in your jobApi service
-      // const res = await deleteJob(jobId);
-  
-      // After successful deletion, you can fetch the updated job data
-      // const { data: updatedJobData } = await useGetJobprofileQuery();
-  
-      // Update the state or refetch data as needed
-      // setJobData(updatedJobData.jobs);
-    } catch (error) {
-      console.error('Error during job deletion:', error);
-      // Handle error, show an alert, etc.
-    }
-  };
-
-  const handleConfirmDelete = async () => {
-    try {
-      // Add the logic to delete the job using your API service
-      // For example, you might have a deleteJob function in your jobApi service
-      // const res = await deleteJob(selectedJobId);
-  
-      // After successful deletion, you can fetch the updated job data
-      // const { data: updatedJobData } = await useGetJobprofileQuery();
-  
-      // Update the state or refetch data as needed
-      // setJobData(updatedJobData.jobs);
-  
-      setDeleteDialogOpen(false); // Close the dialog after successful deletion
-    } catch (error) {
-      console.error('Error during job deletion:', error);
-      // Handle error, show an alert, etc.
-    }
+  const handleDeleteJob = (jobId) => {
+    setSelectedJobId(jobId);
+    setDeleteDialogOpen(true);
   };
   
+  const [deleteProfileMutation] = useDeleteProfileMutation();
 
+const handleConfirmDelete = async () => {
+  try {
+    const res = await deleteProfileMutation(selectedJobId);
+    // Handle the response as needed
+    setDeleteDialogOpen(false);
+  } catch (error) {
+    console.error('Error during job deletion:', error);
+    // Handle error, show an alert, etc.
+  }
+};
+
+      
 
     
-
-  
 
   
   
@@ -276,28 +256,28 @@ const Employee = () => {
       </TableRow>
     </TableHead>
     <TableBody>
-      {jobs.map((job) => (
-        <TableRow key={job.id}>
-          <TableCell sx={{ fontSize: '12px' }}>{job.project.name}</TableCell>
-          <TableCell sx={{ fontSize: '12px' }}>{job.work.name}</TableCell>
-          <TableCell sx={{ fontSize: '12px' }}>{moment(job.start_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-          <TableCell sx={{ fontSize: '12px' }}>{moment(job.end_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-          <TableCell sx={{ fontSize: '12px' }}>{calculateTotalHours(job.start_time, job.end_time)}</TableCell>
-          <TableCell>
-  {/* Red Round Cross Icon */}
-  <CancelIcon
-    color="error"
-    sx={{ cursor: 'pointer' }}
-    onClick={() => {
-      setSelectedJobId(job.id);
-      setDeleteDialogOpen(true);
-    }}
-  />
-</TableCell>
+  {jobs
+    .slice()
+    .sort((a, b) => moment(a.start_time).valueOf() - moment(b.start_time).valueOf())
+    .map((job) => (
+      <TableRow key={job.id}>
+        <TableCell sx={{ fontSize: '12px' }}>{job.project.name}</TableCell>
+        <TableCell sx={{ fontSize: '12px' }}>{job.work.name}</TableCell>
+        <TableCell sx={{ fontSize: '12px' }}>{moment(job.start_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+        <TableCell sx={{ fontSize: '12px' }}>{moment(job.end_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+        <TableCell sx={{ fontSize: '12px' }}>{calculateTotalHours(job.start_time, job.end_time)}</TableCell>
+        <TableCell>
+          {/* Red Round Cross Icon */}
+          <CancelIcon
+  color="error"
+  sx={{ cursor: 'pointer' }}
+  onClick={() => handleDeleteJob(job.id)}
+/>
+        </TableCell>
+      </TableRow>
+    ))}
+</TableBody>
 
-        </TableRow>
-      ))}
-    </TableBody>
     <Dialog open={isDeleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
   <DialogTitle>Confirm Delete</DialogTitle>
   <DialogContent>

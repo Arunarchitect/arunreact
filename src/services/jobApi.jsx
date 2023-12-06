@@ -38,6 +38,12 @@ export const jobApi = createApi({
         };
       },
     }),
+    deleteProfile: builder.mutation({
+      query: (id) => ({
+        url: `${id}/`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -48,4 +54,5 @@ export const {
   useGetWorkprofileQuery,
   useGetJobprofileQuery,
   useSaveProfileMutation,
+  useDeleteProfileMutation
 } = jobApi;
