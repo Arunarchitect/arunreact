@@ -1,19 +1,21 @@
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const jobApi = createApi({
   reducerPath: 'jobApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/apijob/jobs' }),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
-      query: (job) => {
+      query: (formData) => {
         return {
           url: 'create/',
           method: 'POST',
-          body: job
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
         };
-      }
+      },
     }),
     getJobprofile: builder.query({
       query: () => {
@@ -21,7 +23,7 @@ export const jobApi = createApi({
           url: 'list/',
           method: 'GET',
         };
-      }
+      },
     }),
     getProjectprofile: builder.query({
       query: () => {
@@ -29,7 +31,7 @@ export const jobApi = createApi({
           url: 'project/',
           method: 'GET',
         };
-      }
+      },
     }),
     getWorkprofile: builder.query({
       query: () => {
@@ -37,17 +39,16 @@ export const jobApi = createApi({
           url: 'work/',
           method: 'GET',
         };
-      }
+      },
     }),
-    // deleteProfile: builder.mutation({
-    //   query: (id) => ({
-    //     url: `projects/${id}/`,
-    //     method: 'DELETE',
-    //   }),
-    // }),
   }),
-})
+});
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useGetProjectprofileQuery,useGetWorkprofileQuery, useGetJobprofileQuery, useSaveProfileMutation} = jobApi
+export const {
+  useGetProjectprofileQuery,
+  useGetWorkprofileQuery,
+  useGetJobprofileQuery,
+  useSaveProfileMutation,
+} = jobApi;

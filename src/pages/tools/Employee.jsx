@@ -115,56 +115,58 @@ const Employee = () => {
   const [penddate, setPenddate] = useState(new Date());
 
 
+  const [formValues, setFormValues] = useState({
+    pproject: '',
+    pwork: '',
+    pstartdate: new Date(),
+    penddate: new Date(),
+  });
+
+  const resetForm = () => {
+    setFormValues({
+      pproject: '',
+      pwork: '',
+      pstartdate: new Date(),
+      penddate: new Date(),
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log('pproject:', pproject);
-    // console.log('pwork:', pwork);
   
     // Check if all required fields are filled
-    if (pproject && pwork && pstartdate && penddate) {
-      // Create an object with the required fields
+    if (pproject && pproject.id && pproject.name && pwork && pwork.id && pwork.name && pstartdate && penddate) {
       const formData = new FormData();
-      formData.append('pproject_id', pproject.id);
-      formData.append('pproject_name', pproject.name);
-      formData.append('pwork_id', pwork.id);
-      formData.append('pwork_name', pwork.name);;
-      formData.append('pstartdate', dayjs(pstartdate).format("YYYY-MM-DDTHH:mm:ssZ"));
-      formData.append('penddate', dayjs(penddate).format("YYYY-MM-DDTHH:mm:ssZ"));
+      formData.append('project[id]', pproject.id);
+      formData.append('project[name]', pproject.name);
+      formData.append('work[id]', pwork.id);
+      formData.append('work[name]', pwork.name);
+      formData.append('start_time', dayjs(pstartdate).format("YYYY-MM-DDTHH:mm:ss[Z]"));
+      formData.append('end_time', dayjs(penddate).format("YYYY-MM-DDTHH:mm:ss[Z]"));
 
-      console.log('FormData:', formData);
-      console.log('pproject:', pproject);
-      console.log('pwork:', pwork);
-      console.log('pstartdate:', pstartdate);
-      console.log('penddate:', penddate);
-
-
-      try {
-        // Trigger the saveProfile mutation with the form data
-        const res = await saveProfile(formData).catch((error) => {
-          console.error('Error during saveProfile mutation:', error);
-          setError({ status: true, msg: 'An error occurred', type: 'error' });
-        });
   
-        // Check the response from the server
+      console.log("Form Data:", formData); // Log the form data to the console for debugging
+  
+      try {
+        const res = await saveProfile(formData);
+  
         if (res && res.data && res.data.status === 'success') {
-          // Display a success message and reset the form
           setError({ status: true, msg: 'Uploaded Successfully', type: 'success' });
-          resetForm();
-          refetch(); // Refetch the data to update the job list
+          resetForm(); // Reset the form after successful submission
+          refetch();
         } else {
-          // Display an error message if the server response indicates failure
           setError({ status: true, msg: 'Upload Failed', type: 'error' });
         }
       } catch (error) {
-        // Handle errors that may occur during the form submission
         console.error('Error during form submission:', error);
         setError({ status: true, msg: 'An error occurred', type: 'error' });
       }
     } else {
-      // Display an error message if any required field is missing
       setError({ status: true, msg: 'All fields are required', type: 'error' });
     }
   };
+  
+  
 
   //payment calculation
   const [paymentPerHour, setPaymentPerHour] = useState(100); // Set the default value to 100
@@ -200,7 +202,7 @@ const Employee = () => {
       <Box sx={{ flexGrow: 1, p: 3 }} style={{ backgroundColor: 'gray' }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-          <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 300 }, overflow: 'auto' }} className='gradient3'>
+          <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 300 }, overflow: 'auto'  ,padding: 2}} className='gradient3'>
               <CardContent>
                 <Typography variant="h5">Name</Typography>
                 <Typography variant="h6">Designation</Typography>
@@ -231,7 +233,7 @@ const Employee = () => {
                 </Table>
               </TableContainer>
             </Card>
-            <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 300 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 ,padding: 2  } }} className='gradient3'>
+            <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 350 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 ,padding: 2  } }} className='gradient3'>
               <CardContent>
                 <h2>Work Data Dashboard</h2>
                 <Typography variant="h6">Grand Total Hours: {calculateGrandTotalHours()}</Typography>
@@ -262,8 +264,9 @@ const Employee = () => {
             </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={6} lg={6}>
-          <Card sx={{ width: '100%', height: { xs: 500, sm: 615, md: 615, lg: 615 } }} className='gradient3'>
+          <Card sx={{ width: '100%', height: { xs: 500, sm: 615, md: 615, lg: 665 } }} className='gradient3'>
   <CardContent>
+  <Box component="form" sx={{ p: 3 }} noValidate id='' onSubmit={handleSubmit}>
     <Typography variant="h5">Add work</Typography>
     <Typography variant="h6">Record your Work</Typography>
 
@@ -274,11 +277,13 @@ const Employee = () => {
   value={pproject ? pproject.id : ''}
   onChange={(e) => {
     const selectedProject = projectData.jobs.find((project) => project.id === e.target.value);
-    setPproject(selectedProject);
+    setPproject(selectedProject);  // Correctly setting the selected project object
+    console.log("Selected Project:", selectedProject);
   }}
   sx={{ width: '100%', height: '40px', padding: 1 }}
 >
-  <MenuItem value="" disabled>
+
+  <MenuItem value="" id="project[id]" disabled>
     Choose your Project
   </MenuItem>
   {projectData && projectData.jobs && projectData.jobs.map((project) => (
@@ -294,13 +299,14 @@ const Employee = () => {
 <div style={{ width: '100%' }}>
   <InputLabel htmlFor="workDropdown">Work</InputLabel>
   <Select
-  value={pwork? pwork.id : ''}
+  value={pwork ? pwork.id : ''}
   onChange={(e) => {
     const selectedWork = taskData.jobs.find((task) => task.id === e.target.value);
-    setPwork(selectedWork);
+    setPwork(selectedWork);  // Correctly setting the selected work object
   }}
   sx={{ width: '100%', height: '40px', padding: 1 }}
 >
+
   <MenuItem value="" disabled>
     Choose your Work
   </MenuItem>
@@ -318,7 +324,7 @@ const Employee = () => {
       <DateTimePicker
         label="Start Time"
         // value={pstartdate}
-        // onChange={(date) => setPstartdate(date)}
+        onChange={(date) => setPstartdate(date)}
         required
         sx={{ width: '100%', padding: 1 }}
       />
@@ -329,17 +335,18 @@ const Employee = () => {
       <DateTimePicker
         label="End Time"
         // value={penddate}
-        // onChange={(date) => setPenddate(date)}
+        onChange={(date) => setPenddate(date)}
         required
         sx={{ width: '100%', padding: 1 }}
       />
     </LocalizationProvider>
 
     {/* Button to Add work data */}
-    <Button variant="contained" sx={{ width: '100%', padding: 2 }} onClick={handleSubmit}>
+    <Button variant="contained" sx={{ width: '100%', padding: 2 }} type="submit">
       Add work data
     </Button>
     {error.status ? <Alert severity={error.type}>{error.msg}</Alert> : ''}
+    </ Box>
   </CardContent>
 </Card>
 
