@@ -1,7 +1,10 @@
 
 import Layout from '../../components/layout/Layout'
 import { Box, Card, CardContent, Typography, FormControlLabel, InputLabel, Select, MenuItem, Button, TextField, RadioGroup, Radio, Table, TableRow, TableCell, Alert,
-  TableContainer, Paper, TableHead, TableBody } from '@mui/material'
+  TableContainer, Paper, TableHead, TableBody , Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,} from '@mui/material'
 import { Grid } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,6 +17,8 @@ import { useState , useRef, useEffect} from 'react';
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 
 
@@ -25,6 +30,10 @@ const Employee = () => {
   const { data: projectData } = useGetProjectprofileQuery(); // Assuming useGetProjectsQuery is a separate hook for fetching projects
   const { data: taskData } = useGetWorkprofileQuery(); 
   const [saveProfile] = useSaveProfileMutation();
+
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState(null);
+
 
 
 
@@ -215,6 +224,26 @@ const Employee = () => {
     }
   };
 
+  const handleConfirmDelete = async () => {
+    try {
+      // Add the logic to delete the job using your API service
+      // For example, you might have a deleteJob function in your jobApi service
+      // const res = await deleteJob(selectedJobId);
+  
+      // After successful deletion, you can fetch the updated job data
+      // const { data: updatedJobData } = await useGetJobprofileQuery();
+  
+      // Update the state or refetch data as needed
+      // setJobData(updatedJobData.jobs);
+  
+      setDeleteDialogOpen(false); // Close the dialog after successful deletion
+    } catch (error) {
+      console.error('Error during job deletion:', error);
+      // Handle error, show an alert, etc.
+    }
+  };
+  
+
 
     
 
@@ -234,36 +263,56 @@ const Employee = () => {
                 <Typography variant="h6">Designation</Typography>
                 <Typography variant="h6">Involved Projects</Typography>
               </CardContent>
-              <TableContainer component={Paper} sx={{ overflowX: 'auto' }} >
-                <Table  ref={tableref}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Project Name</TableCell>
-                      <TableCell>Work Name</TableCell>
-                      <TableCell>Start Time</TableCell>
-                      <TableCell>End Time</TableCell>
-                      <TableCell>Total Hours</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-  {jobs.map((job) => (
-    <TableRow key={job.id}>
-      <TableCell>{job.project.name}</TableCell>
-      <TableCell>{job.work.name}</TableCell>
-      <TableCell>{moment(job.start_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-      <TableCell>{moment(job.end_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-      <TableCell>{calculateTotalHours(job.start_time, job.end_time)}</TableCell>
-      <TableCell>
-        {/* Delete Button */}
-        <Button variant="contained" color="secondary" onClick={() => handleDeleteJob(job.id)}>
-          Delete
-        </Button>
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-                </Table>
-              </TableContainer>
+              <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+  <Table ref={tableref} sx={{ tableLayout: 'auto' }}>
+    <TableHead>
+      <TableRow>
+        <TableCell sx={{ fontWeight: 'bold', fontSize: '14px' }}>Project Name</TableCell>
+        <TableCell sx={{ fontWeight: 'bold', fontSize: '14px' }}>Work Name</TableCell>
+        <TableCell sx={{ fontWeight: 'bold', fontSize: '14px' }}>Start Time</TableCell>
+        <TableCell sx={{ fontWeight: 'bold', fontSize: '14px' }}>End Time</TableCell>
+        <TableCell sx={{ fontWeight: 'bold', fontSize: '14px' }}>Total Hours</TableCell>
+        <TableCell sx={{ fontWeight: 'bold', fontSize: '14px' }}>Action</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {jobs.map((job) => (
+        <TableRow key={job.id}>
+          <TableCell sx={{ fontSize: '12px' }}>{job.project.name}</TableCell>
+          <TableCell sx={{ fontSize: '12px' }}>{job.work.name}</TableCell>
+          <TableCell sx={{ fontSize: '12px' }}>{moment(job.start_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+          <TableCell sx={{ fontSize: '12px' }}>{moment(job.end_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+          <TableCell sx={{ fontSize: '12px' }}>{calculateTotalHours(job.start_time, job.end_time)}</TableCell>
+          <TableCell>
+  {/* Red Round Cross Icon */}
+  <CancelIcon
+    color="error"
+    sx={{ cursor: 'pointer' }}
+    onClick={() => {
+      setSelectedJobId(job.id);
+      setDeleteDialogOpen(true);
+    }}
+  />
+</TableCell>
+
+        </TableRow>
+      ))}
+    </TableBody>
+    <Dialog open={isDeleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+  <DialogTitle>Confirm Delete</DialogTitle>
+  <DialogContent>
+    <Typography>Are you sure you want to delete this job?</Typography>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+    <Button onClick={handleConfirmDelete} color="error">
+      Confirm Delete
+    </Button>
+  </DialogActions>
+</Dialog>
+
+  </Table>
+</TableContainer>
             </Card>
             <Card sx={{ width: '100%', height: { xs: 350, sm: 300, md: 300, lg: 350 }, mt: { xs: 2, sm: 2, md: 2, lg: 2 ,padding: 2  } }} className='gradient3'>
               <CardContent>
