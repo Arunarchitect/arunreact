@@ -197,6 +197,24 @@ const Employee = () => {
     setRevenue(revenueValue.toFixed(2));
   };
 
+  
+  const handleDeleteJob = async (jobId) => {
+    try {
+      // Add the logic to delete the job using your API service
+      // For example, you might have a deleteJob function in your jobApi service
+      // const res = await deleteJob(jobId);
+  
+      // After successful deletion, you can fetch the updated job data
+      // const { data: updatedJobData } = await useGetJobprofileQuery();
+  
+      // Update the state or refetch data as needed
+      // setJobData(updatedJobData.jobs);
+    } catch (error) {
+      console.error('Error during job deletion:', error);
+      // Handle error, show an alert, etc.
+    }
+  };
+
 
     
 
@@ -228,16 +246,22 @@ const Employee = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {jobs.map((job) => (
-                      <TableRow key={job.id}>
-                        <TableCell>{job.project.name}</TableCell>
-                        <TableCell>{job.work.name}</TableCell>
-                        <TableCell>{moment(job.start_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-                        <TableCell>{moment(job.end_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-                        <TableCell>{calculateTotalHours(job.start_time, job.end_time)}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
+  {jobs.map((job) => (
+    <TableRow key={job.id}>
+      <TableCell>{job.project.name}</TableCell>
+      <TableCell>{job.work.name}</TableCell>
+      <TableCell>{moment(job.start_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+      <TableCell>{moment(job.end_time).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+      <TableCell>{calculateTotalHours(job.start_time, job.end_time)}</TableCell>
+      <TableCell>
+        {/* Delete Button */}
+        <Button variant="contained" color="secondary" onClick={() => handleDeleteJob(job.id)}>
+          Delete
+        </Button>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
                 </Table>
               </TableContainer>
             </Card>
