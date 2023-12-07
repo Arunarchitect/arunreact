@@ -130,9 +130,9 @@ export const { useSaveProfileMutation, useGetResumeprofileQuery, useDeleteProfil
 
 export const testApi2 = createApi({
   reducerPath: 'testApi2',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.arunarchitect.in/projects' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/apijob' }),
   endpoints: (builder) => ({
-    saveProfile: builder.mutation({
+    saveProject: builder.mutation({
       query: (blog) => {
         return {
           url: 'projects/',
@@ -141,15 +141,15 @@ export const testApi2 = createApi({
         };
       }
     }),
-    getResumeprofile: builder.query({
+    getProject: builder.query({
       query: () => {
         return {
-          url: 'list/',
+          url: 'projects/',
           method: 'GET',
         };
       }
     }),
-    deleteProfile: builder.mutation({
+    deleteProject: builder.mutation({
       query: (id) => ({
         url: `projects/${id}/`,
         method: 'DELETE',
@@ -160,4 +160,4 @@ export const testApi2 = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useSaveProjectMutation, useGetResumeprojectQuery, useDeleteProjectMutation } = testApi2
+export const { useSaveProjectMutation, useGetProjectQuery, useDeleteProjectMutation } = testApi2

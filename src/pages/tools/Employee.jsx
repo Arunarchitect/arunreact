@@ -12,6 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';  // Import dayjs library
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { useGetJobprofileQuery, useSaveProfileMutation, useGetProjectprofileQuery , useGetWorkprofileQuery, useDeleteProfileMutation} from '../../services/jobApi';
+import { useGetProjectQuery} from '../../services/testApi';
 import moment from 'moment';
 import { useState , useRef, useEffect} from 'react';
 import { useDownloadExcel } from 'react-export-table-to-excel';
@@ -27,7 +28,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 const Employee = () => {
 
   const { data: jobData } = useGetJobprofileQuery(); // Rename data to jobData
-  const { data: projectData } = useGetProjectprofileQuery(); // Assuming useGetProjectsQuery is a separate hook for fetching projects
+  const { data: projectData } = useGetProjectQuery();
+  // Assuming useGetProjectsQuery is a separate hook for fetching projects
   const { data: taskData } = useGetWorkprofileQuery(); 
   const [saveProfile] = useSaveProfileMutation();
 
@@ -82,7 +84,7 @@ const Employee = () => {
   
 
   const jobs = jobData ? jobData.jobs : [];
-  const projects = projectData ? projectData.projects : []; 
+  const projects = projectData ? projectData : []; 
 
   // Immediately calculate revenue with the default value
   useEffect(() => {
@@ -153,6 +155,9 @@ const Employee = () => {
         project: {
           id: pproject.id,
           name: pproject.name,
+          description: pproject.description,
+          created_by: pproject.created_by,
+
         },
         work: {
           id: pwork.id,
@@ -332,29 +337,29 @@ const handleConfirmDelete = async () => {
     <Typography variant="h6">Record your Work</Typography>
 
     {/* Project Dropdown */}
-    <div style={{ width: '100%' }}>
-      <InputLabel htmlFor="projectDropdown">Project</InputLabel>
-      <Select
-  value={pproject ? pproject.id : ''}
-  onChange={(e) => {
-    const selectedProject = projectData.jobs.find((project) => project.id === e.target.value);
-    setPproject(selectedProject);  // Correctly setting the selected project object
-    console.log("Selected Project:", selectedProject);
-  }}
-  sx={{ width: '100%', height: '40px', padding: 1 }}
->
+<div style={{ width: '100%' }}>
+  <InputLabel htmlFor="projectDropdown">Project</InputLabel>
+  <Select
+    value={pproject ? pproject.id : ''}
+    onChange={(e) => {
+      const selectedProject = projectData.find((project) => project.id === e.target.value);
+      setPproject(selectedProject);  // Correctly setting the selected project object
+      console.log("Selected Project:", selectedProject);
+    }}
+    sx={{ width: '100%', height: '40px', padding: 1 }}
+  >
 
-  <MenuItem value="" id="project[id]" disabled>
-    Choose your Project
-  </MenuItem>
-  {projectData && projectData.jobs && projectData.jobs.map((project) => (
-    <MenuItem key={project.id} value={project.id}>
-      {project.name}
+    <MenuItem value="" disabled>
+      Choose your Project
     </MenuItem>
-  ))}
-</Select>
+    {projectData && projectData.map((project) => (
+      <MenuItem key={project.id} value={project.id}>
+        {project.name}
+      </MenuItem>
+    ))}
+  </Select>
+</div>
 
-    </div>
 
     {/* Work Dropdown */}
 <div style={{ width: '100%' }}>

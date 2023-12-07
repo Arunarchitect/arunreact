@@ -1,24 +1,19 @@
 import React from 'react';
-import Layout from '../../components/layout/Layout';
 import { Box, Grid, Card, CardContent } from '@mui/material';
-import '../../styles/Dash.css';
+import Layout from '../../components/layout/Layout';
+import { useGetProjectQuery } from '../../services/testApi';
 
 const Projects = () => {
-  const projects = [
-    { title: 'Project 1', description: 'Description for Project 1' },
-    { title: 'Project 2', description: 'Description for Project 2' },
-    { title: 'Project 3', description: 'Description for Project 3' },
-    { title: 'Project 4', description: 'Description for Project 4' },
-  ];
+  const { data: projectData } = useGetProjectQuery();
 
-  const ProjectCard = ({ title, description }) => (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }} className='gradient3'>
-      <CardContent>
-        <h5>{title}</h5>
-        <p>{description}</p>
-      </CardContent>
-    </Card>
-  );
+
+  // Check if projectData and projects are available before mapping
+  // const projects = projectData && projectData.projects ? projectData.projects : [];
+  const projects = projectData ? projectData : [];
+  // Log projectData to the console for debugging
+
+
+// Check if projectData is available before mapping
 
   return (
     <Layout>
@@ -41,8 +36,17 @@ const Projects = () => {
               <CardContent>
                 
                 <h2>My projects</h2>
-                {projects.map((project, index) => (
-                  <ProjectCard key={index} title={project.title} description={project.description} />
+                {projects.map((project) => (
+                  <div key={project.id}>
+                    <p>{project.name}-{project.description}</p>
+                    <h4>Members:</h4>
+                    <ul>
+                      {project.members.map((member) => (
+                        <li key={member.id}>{member.name}</li>
+                      ))}
+                    </ul>
+                    {console.log(project)}
+                  </div>
                 ))}
               </CardContent>
             </Card>
