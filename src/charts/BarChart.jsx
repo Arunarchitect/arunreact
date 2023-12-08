@@ -75,7 +75,7 @@ function BarChart({ title, budget, unit, onEntryValueChange }) {
   // console.log("Options Object:", options);
 
   return (
-    <div>
+    <div id="barChartContainer">
       <Bar data={data} options={options} />      
     </div>
   );

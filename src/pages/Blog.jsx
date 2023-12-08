@@ -126,7 +126,7 @@ const Blog = () => {
                   component="img"
                   alt={blog.title}
                   height="140"
-                  image={`https://api.arunarchitect.in/${blog.bimage}`}
+                  image={`https://api.modelflick.com/${blog.bimage}`}
                 />
               </Link>
               <CardContent>

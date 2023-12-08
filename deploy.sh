@@ -5,6 +5,6 @@ echo "Building app..."
 npm run build
 
 echo "Deploying files to server..."
-scp -r dist/* react@95.179.190.14:/var/www/95.179.190.14/
+scp -r dist/* react@139.84.140.96:/var/www/139.84.140.96/
 
 echo "Done"

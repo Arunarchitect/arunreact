@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 // Define a service using a base URL and expected endpoints
 export const testApi = createApi({
   reducerPath: 'testApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.arunarchitect.in/apis/user' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apis/user' }),
   endpoints: (builder) => ({
     registerUser: builder.mutation({
         query: (user) => {
@@ -89,7 +89,7 @@ export const { useRegisterUserMutation, useLoginUserMutation, useGetLoggedUserQu
 
 export const testApi1 = createApi({
   reducerPath: 'testApi1',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.arunarchitect.in/apiblog' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apiblog' }),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
       query: (blog) => {
@@ -130,7 +130,7 @@ export const { useSaveProfileMutation, useGetResumeprofileQuery, useDeleteProfil
 
 export const testApi2 = createApi({
   reducerPath: 'testApi2',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/apijob' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apijob' }),
   endpoints: (builder) => ({
     saveProject: builder.mutation({
       query: (blog) => {

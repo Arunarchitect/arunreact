@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const jobApi = createApi({
   reducerPath: 'jobApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/apijob/jobs' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apijob/jobs' }),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
       query: (job) => {

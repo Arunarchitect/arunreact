@@ -60,7 +60,7 @@ const Post = () => {
             <CardMedia
               sx={{ height: "500px", width: "100%" }}
               component="img"
-              image={`https://api.arunarchitect.in/${blog.bimage}`}
+              image={`https://api.modelflick.com/${blog.bimage}`}
               alt="architect"
             />
             
