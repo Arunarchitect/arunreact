@@ -1,10 +1,11 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { BASE_URL } from '../services/urlApi'
 
 // Define a service using a base URL and expected endpoints
 export const testApi = createApi({
   reducerPath: 'testApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apis/user' }),
+  baseQuery: fetchBaseQuery({baseUrl: `${BASE_URL}apis/user`}), 
   endpoints: (builder) => ({
     registerUser: builder.mutation({
         query: (user) => {
@@ -89,7 +90,7 @@ export const { useRegisterUserMutation, useLoginUserMutation, useGetLoggedUserQu
 
 export const testApi1 = createApi({
   reducerPath: 'testApi1',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apiblog' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}apiblog` }),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
       query: (blog) => {
@@ -130,7 +131,7 @@ export const { useSaveProfileMutation, useGetResumeprofileQuery, useDeleteProfil
 
 export const testApi2 = createApi({
   reducerPath: 'testApi2',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apijob' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}apijob` }),
   endpoints: (builder) => ({
     saveProject: builder.mutation({
       query: (blog) => {

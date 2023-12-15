@@ -4,6 +4,7 @@ import { Box, Grid, CardMedia, Container, Typography } from "@mui/material";
 import constructImage from '../../images/construct.png';
 import { useParams } from "react-router-dom";
 import { useGetResumeprofileQuery } from '../../services/testApi';
+import { BASE_URL } from '../../services/urlApi'
 
 const Post = () => {
   const { id } = useParams();
@@ -60,7 +61,7 @@ const Post = () => {
             <CardMedia
               sx={{ height: "500px", width: "100%" }}
               component="img"
-              image={`https://api.modelflick.com/${blog.bimage}`}
+              image={`${BASE_URL}${blog.bimage}`}
               alt="architect"
             />
             

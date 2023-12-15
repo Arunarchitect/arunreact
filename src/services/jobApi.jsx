@@ -1,9 +1,10 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BASE_URL } from '../services/urlApi'
 
 export const jobApi = createApi({
   reducerPath: 'jobApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.modelflick.com/apijob/jobs' }),
+  baseQuery: fetchBaseQuery({baseUrl: `${BASE_URL}apijob/jobs`}),
   endpoints: (builder) => ({
     saveProfile: builder.mutation({
       query: (job) => {

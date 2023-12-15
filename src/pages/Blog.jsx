@@ -14,6 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import '../styles/Dash.css';
 import EditPost from './blog/EditPost';
+import { BASE_URL } from '../services/urlApi'
 
 import { useGetResumeprofileQuery, useDeleteProfileMutation } from '../services/testApi';
 
@@ -126,7 +127,7 @@ const Blog = () => {
                   component="img"
                   alt={blog.title}
                   height="140"
-                  image={`https://api.modelflick.com/${blog.bimage}`}
+                  image={`${BASE_URL}${blog.bimage}`} 
                 />
               </Link>
               <CardContent>
