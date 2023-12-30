@@ -26,8 +26,11 @@ const Footer = () => {
                 <Link to={'https://youtube.com/@Modelflick?si=7IuI-8uqdng2lzg1'}><YouTubeIcon /></Link>
                 <Link to={'https://x.com/modelflick?t=7POKJbh0SWT5v51X33xMkA&s=09'}><TwitterIcon /></Link>
             </Box>
-            <Typography sx={{"@media(max-width:600px)":{ fontSize: "1rem"}}}>
+            <Typography sx={{ "@media(max-width:600px)": { fontSize: "1rem" } }}>
                 All Rights Reserved &copy; Modelflick
+            </Typography>
+            <Typography sx={{ "@media(max-width:600px)": { fontSize: "1rem" } }}>
+                <Link to={'/terms'}>Terms and Conditions</Link>
             </Typography>
         </Box>
     </>

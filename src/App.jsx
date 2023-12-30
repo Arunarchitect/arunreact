@@ -1,7 +1,7 @@
 import Layout from "./components/layout/Layout"
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
 import Home from './pages/Home'
-import About from './pages/About'
+import Terms from './pages/Terms'
 import Contact from './pages/Contact'
 import Pagenotfound from './pages/Pagenotfound'
 import Tools from './pages/Tools'
@@ -27,7 +27,7 @@ function App() {
         <BrowserRouter>
          <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/tools" element={<Tools />} />
             <Route path="/blog" element={<Blog />} />
